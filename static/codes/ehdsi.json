@@ -1,0 +1,71 @@
+{
+  "custodian": [
+    {
+      "title": "Ireland - Department of Health",
+      "oid": "2.16.17.710.813.1000.990.1.5",
+      "extension": "mhec.gov.ie",
+      "address": "Block 1, Miesian Plaza, 50 – 58 Lower Baggot Street",
+      "city": "Dublin",
+      "county": "Dublin 2",
+      "postalCode": "D02 XW14",
+      "country": "Ireland",
+      "phone": "+353 01 635 4000",
+      "use": "WP",
+      "email": "customerservices@health.gov.ie",
+      "website": "https://www.gov.ie/en/organisation/department-of-health/"
+    }
+  ],
+  "rootDirectory": [
+    {
+      "realmCode": "IE",
+      "typeId": [
+        {
+          "extension": "POCD_HD000040",
+          "root": "2.16.840.1.113883.1.3"
+        }
+      ],
+      "codeElement": [
+        {
+          "displayName": "eHDSI Patient Summary Document",
+          "code": "60591-5",
+          "codeSystem": "2.16.840.1.113883.6.1",
+          "codeSystemName": "LOINC",
+          "codeSystemVersion": "2.64"
+        }
+      ],
+      "languageCode": [
+        {
+          "code": "en-GB"
+        }
+      ],
+      "templateId_01": "1.3.6.1.4.1.12559.11.10.1.3.1.1.3",
+      "templateId_02": "1.3.6.1.4.1.19376.1.5.3.1.1.1"
+    }
+  ],
+  "typeId": [
+    {
+      "root": "2.16.840.1.113883.1.3",
+      "extension": "POCD_HD000040"
+    }
+  ],
+  "included": [
+    {
+      "oid": " "
+    }
+  ],
+
+  "confidentialityCode": [
+    {
+      "confidentiality": "N",
+      "codeSystem": "2.16.840.1.113883.5.25",
+      "displayName": "Normal"
+    }
+  ],
+
+  "setId": [
+    {
+      "root": "2.16.840.1.113883.1.3",
+      "extension": "POCD_HD000040"
+    }
+  ]
+}
