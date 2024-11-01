@@ -30,7 +30,13 @@ def create_sample_patient_record():
             "city": "Springfield",
             "state": "IL",
             "postalCode": "62701"
+        }],
+        telecom=[{
+            "system": "phone",
+            "value": "555-555-5555",
+            "use": "home"
         }]
+
     )
 
     # Allergies
@@ -61,7 +67,7 @@ def create_sample_patient_record():
                     display="Allergy to penicillin"
                 )
             ],
-            text="Allergy to penicillin"
+            text="🚧 Allergy to penicillin"
         ),
         onsetDateTime="2024-01-01"
     )
