@@ -1,0 +1,85 @@
+{
+  "sections": [
+    {
+      "section_title": "Allergies",
+      "oid1": "2.16.840.1.113883.10.20.1.2",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.3.13",
+      "code": "48765-2",
+      "display_name": "Allergies, adverse reactions, alerts",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Medications",
+      "oid1": "2.16.840.1.113883.10.20.1.2",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.3.19",
+      "code": "10160-0",
+      "display_name": "History of medication use",
+      "code_system": "1.3.6.1.4.1.19376.1.5.3.1.3.6",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Problems List",
+      "oid1": "2.16.840.1.113883.10.20.1.11",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.3.6",
+      "code": "11450-4",
+      "display_name": "Problem List",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Procedures",
+      "oid1": "1.3.6.1.4.1.19376.1.5.3.1.3.11",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.3.12",
+      "code": "47519-4",
+      "display_name": "History of procedures",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Devices",
+      "oid1": "2.16.840.1.11383.10.20.1.7",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.1.5.3.5",
+      "code": "46264-8",
+      "display_name": "History of devices",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Past Illnesses",
+      "oid1": "1.3.6.1.4.1.19376.1.5.3.1.3.8",
+      "oid2": "",
+      "code": "11348-0",
+      "display_name": "History of Past Illness",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Immunizations",
+      "oid1": "2.16.840.1.113883.10.20.1.6",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.3.23",
+      "code": "11369-6",
+      "display_name": "Immunizations",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Vital Signs",
+      "oid1": "2.16.840.1.113883.10.20.1.31",
+      "oid2": "1.3.6.1.4.1.19376.1.5.3.1.4.13.2",
+      "code": "8716-3",
+      "display_name": "Vital signs",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    },
+    {
+      "section_title": "Pregnancy History Section",
+      "oid1": "1.3.6.1.4.1.19376.1.5.3.1.1.5.3.4",
+      "oid2": "",
+      "code": "10162-6",
+      "display_name": "Pregnancy History",
+      "code_system": "2.16.840.1.113883.6.1",
+      "code_system_name": "LOINC"
+    }
+  ]
+}
