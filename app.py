@@ -15,6 +15,12 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 
+# welcome page
+@app.route("/", methods=["GET"])
+def index():  
+    return render_template("index.html")
+
+
 
 @app.route("/fhir/patient_summary", methods=["GET"])
 def get_patient_summary():
