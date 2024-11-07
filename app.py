@@ -1,12 +1,9 @@
-import os
-import secrets
 import json
-from flask import render_template
-from flask import Flask, jsonify, redirect, request, send_from_directory, url_for
-from fhirpy import SyncFHIRClient
-from create_patient_record import create_sample_patient_record
-from convert_fhir_to_cda import fhir_to_cda
+import secrets
 
+from fhirpy import SyncFHIRClient
+from flask import (Flask, flash, jsonify, render_template, request, redirect, url_for)
+from create_patient_record import create_sample_patient_record
 
 app = Flask(__name__)
 
@@ -66,7 +63,7 @@ def fhir_patient_list():
     """Get a list of patients from the HAPI server and display them to the user"""
 
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
-    patients = client.resources("Patient").limit(500).fetch()
+    patients = client.resources("Patient").limit(100).fetch()
 
     patient_list = []
     for patient in patients:
@@ -85,20 +82,21 @@ def fhir_patient_summary():
     """Get the patient id from the user selection and display the patient summary"""
 
     patient_id = request.form.get("patient_id")
+    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
 
-    if patient_id:
-        client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    try:
         patient = client.resources("Patient").get(id=patient_id)
+    except Exception as e:
+        flash("The patient id is not found", "alert-danger")
+        return redirect(url_for("fhir_patient_list"))
 
-        # Convert FHIR resources to JSON
-        patient_json = patient.serialize()
-        patient_info = []
-        for key, value in patient_json.items():
-            patient_info.append({"key": key, "value": value})
+    # Convert FHIR resources to JSON
+    patient_json = patient.serialize()
+    patient_info = []
+    for key, value in patient_json.items():
+        patient_info.append({"key": key, "value": value})
 
-        return render_template("fhir_patient_summary.html", patient=patient_info)
-
-    return redirect(url_for("index"))
+    return render_template("fhir_patient_summary.html", patient=patient_info)
 
 
 if __name__ == "__main__":
