@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+
+
+<div>
+<a href="{{ url_for('index') }}"><img class="img-error" src="{{ url_for('static', filename='img/500error.jpg')}}"
+        alt="500 server error"></a>
+
+    <p class="lost">It looks like there has been a server error...</p>
+</div>
+
+{% endblock content %}
