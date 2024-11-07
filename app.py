@@ -58,13 +58,13 @@ def get_patient_summary():
 #     return send_from_directory(directory, file_name, as_attachment=True)
 
 
-@app.route("/hl7/patient_summary/fhir/select", methods=["GET"])
+@app.route("/hl7/patient_summary/fhir/select", methods=["GET", "POST"])
 def fhir_patient_list():
     """Get a list of patients from the HAPI server and display them to the user"""
 
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
-    patients = client.resources("Patient").limit(100).fetch()
-
+    patients = client.resources("Patient").sort("-_lastUpdated").limit(100).fetch()
+    
     patient_list = []
     for patient in patients:
         patient_list.append(
@@ -72,12 +72,12 @@ def fhir_patient_list():
                 "id": patient.id,
             }
         )
-        print(patient_list)
+        # print(patient_list)
 
     return render_template("fhir_patient_list.html", patients=patient_list)
 
 
-@app.route("/hl7/patient_summary/fhir/patient", methods=["POST"])
+@app.route("/hl7/patient_summary/fhir/patient", methods=["GET", "POST"])
 def fhir_patient_summary():
     """Get the patient id from the user selection and display the patient summary"""
 
