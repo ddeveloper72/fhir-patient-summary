@@ -9,7 +9,7 @@
             <p>This is Experimental and is in development</p>
             <p>Select a patient ID from the list below.</p>
             <br>
-            <p>Once you have selected the patient ID required, click on the Generate CDA button.</p>
+            <p>Once you have selected the patient ID required, click on the Search button.</p>
             <br>
             <form action="/hl7/patient_summary/fhir/patient" method="POST">
                 <label for="patient_list">Select a Patient:</label>
@@ -25,9 +25,10 @@
                     <label for="custom_patient_id">Enter Patient ID:</label>
                     <input type="text" id="custom_patient_id" name="custom_patient_id" placeholder="Enter Patient ID">
                 </div>
-                <br><br>
-                
+                <br><br>                
                 </select>
+                <P>Please see the <a href="https://hapi.fhir.org/" target="_blank" rel="noopener noreferrer">HAPI Bundle Builder</a> to check the patient ID</P>
+                <p>Note that HAPI Bundle Builder is using a public service.  Do not upload any sensitive information</p>
                 <br><br>
                 <button type="submit" class="button">Search</button>
                 <br><br>
