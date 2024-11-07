@@ -1,3 +1,4 @@
+import os
 import json
 import secrets
 
@@ -64,7 +65,7 @@ def fhir_patient_list():
 
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
     patients = client.resources("Patient").sort("-_lastUpdated").limit(100).fetch()
-    
+
     patient_list = []
     for patient in patients:
         patient_list.append(
@@ -116,4 +117,6 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host=os.getenv("IP"), 
+            port=os.getenv("PORT"), 
+            debug=False)
