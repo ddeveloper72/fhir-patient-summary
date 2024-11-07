@@ -2,7 +2,7 @@ import json
 import secrets
 
 from fhirpy import SyncFHIRClient
-from flask import (Flask, flash, jsonify, render_template, request, redirect, url_for)
+from flask import Flask, flash, jsonify, render_template, request, redirect, url_for
 from create_patient_record import create_sample_patient_record
 
 app = Flask(__name__)
@@ -87,7 +87,7 @@ def fhir_patient_summary():
     try:
         patient = client.resources("Patient").get(id=patient_id)
     except Exception as e:
-        flash("The patient id is not found", "alert-danger")
+        flash("The patient id is not found: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
     # Convert FHIR resources to JSON
@@ -97,6 +97,22 @@ def fhir_patient_summary():
         patient_info.append({"key": key, "value": value})
 
     return render_template("fhir_patient_summary.html", patient=patient_info)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """Page not found error handler"""
+
+    flash(e, "alert-danger")
+    return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    """Internal server error handler"""
+
+    flash(e, "alert-danger")
+    return render_template("500.html"), 500
 
 
 if __name__ == "__main__":
