@@ -15,19 +15,37 @@
                 <label for="patient_list">Select a Patient:</label>
                 <select class="form-select" id="patient_list" name="patient_id" required title="Select Patient ID">
                     <option selected value="">-- Select a patient --</option>
+                    <option value="custom">-- Enter custom patient ID --</option>
                     {% for patient in patients %}
                     <option value="{{ patient.id }}">{{ patient.id }}</option>
                     {% endfor %}
                 </select>
                 <br><br>
+                <div id="custom-patient-id-container" style="display: none;">
+                    <label for="custom_patient_id">Enter Patient ID:</label>
+                    <input type="text" id="custom_patient_id" name="custom_patient_id" placeholder="Enter Patient ID">
+                </div>
+                <br><br>
+                
+                </select>
+                <br><br>
                 <button type="submit" class="button">Search</button>
                 <br><br>
             </form>
-
-
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('patient_list').addEventListener('change', function () {
+        var customPatientIdContainer = document.getElementById('custom-patient-id-container');
+        if (this.value === 'custom') {
+            customPatientIdContainer.style.display = 'block';
+        } else {
+            customPatientIdContainer.style.display = 'none';
+        }
+    });
+</script>
 
 
 {% endblock %}
