@@ -16,7 +16,7 @@ from fhir.resources.timing import Timing
 def create_sample_patient_record():
     # Create a patient resource
     patient = Patient(
-        id="12345",
+        id="12345036089",
         gender="female",
         birthDate="1980-05-12",
         name=[{
@@ -42,7 +42,7 @@ def create_sample_patient_record():
     # Allergies
     allergy = AllergyIntolerance(
         id="allergy1",
-        patient={"reference": "Patient/12345"},
+        patient={"reference": "Patient-12345"},
         clinicalStatus={
             "coding": [
                 {
@@ -76,7 +76,7 @@ def create_sample_patient_record():
     medication = MedicationStatement(
     id="med1",
     subject=Reference(
-        reference="Patient/12345",
+        reference="Patient-12345",
         display="Jane Doe"),
     medication=CodeableReference( # medication reference
         concept=CodeableConcept( # medication concept
@@ -120,7 +120,7 @@ def create_sample_patient_record():
     # Conditions (Medical History)
     condition = Condition(
         id="condition1",
-        subject=Reference(reference="Patient/12345"),
+        subject=Reference(reference="Patient-12345"),
         clinicalStatus=CodeableConcept(
             coding=[
                 Coding(
@@ -160,7 +160,7 @@ def create_sample_patient_record():
     # Procedures 
     procedure = Procedure(
         id="procedure1",
-        subject=Reference(reference="Patient/12345"),
+        subject=Reference(reference="Patient-12345"),
         status="completed",  # required field
         code=CodeableConcept(
             coding=[
@@ -182,7 +182,7 @@ def create_sample_patient_record():
 
     # Bundle all resources together
     bundle = Bundle(
-        id="bundle1",
+        id="12345036089",
         type="collection",
         entry=[
             {"resource": patient},
@@ -192,5 +192,7 @@ def create_sample_patient_record():
             {"resource": procedure}
         ]
     )
+
+    print(bundle.json())
     
     return bundle
