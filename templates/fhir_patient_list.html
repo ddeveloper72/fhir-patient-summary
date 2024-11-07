@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="intro-container">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Search HAPI for FHIR patient</h1>
+            <h3>Instructions</h3>
+            <p>The FHIR Patient Summary document, is being generated from synthetic data uploaded from this app.</p>
+            <p>This is Experimental and is in development</p>
+            <p>Select a patient ID from the list below.</p>
+            <br>
+            <p>Once you have selected the patient ID required, click on the Generate CDA button.</p>
+            <br>
+            <form action="/hl7/patient_summary/fhir/patient" method="POST">
+                <label for="patient_list">Select a Patient:</label>
+                <select class="form-select" id="patient_list" name="patient_id" required title="Select Patient ID">
+                    <option selected value="">-- Select a patient --</option>
+                    {% for patient in patients %}
+                    <option value="{{ patient.id }}">{{ patient.id }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <button type="submit" class="button">Search</button>
+                <br><br>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
