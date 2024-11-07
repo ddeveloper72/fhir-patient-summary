@@ -2,13 +2,14 @@
 
 ## Purpose
 
-The FHIR Patient Summary Application is designed to create a patient summary FHIR document, which is presented as a JSON file. This application also aims to convert the FHIR patient summary into an HL7 level 3 CDA document.
+The FHIR Patient Summary Development Application is designed to create a FHIR patient document bundle, which is presented as a JSON file. This application also aims to convert the FHIR patient summary into an HL7 level 3 CDA document.
 
 🚧 The conversion to HL7 CDA is currently a work in progress.
 
 ## Features
 
-- Generate a sample patient record as a FHIR JSON bundle.
+- Generate a sample patient document bundle as a FHIR bundle.
+- Find HL7 FHIR Patient Summary on the [FHIR HAPI test server](https://hapi.fhir.org/) using this app.
 - Convert the FHIR JSON bundle into an HL7 CDA document (work in progress).
 - I will need to revisit application which creates the FHIR document bundle, to flesh it our further with additional synthetic clinical information that would be present in the original electronic health record.
 
@@ -298,4 +299,3 @@ The application is currently being extended to convert the FHIR JSON bundle into
 2. Install the required dependencies using pip install -r requirements.txt.
 3. Run the application using python app.py.
 4. Access the application in your web browser at http://localhost:5000.
-
