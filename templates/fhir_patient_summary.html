@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container">
+    <h2 class="header">Patient Clinical Document (FHIR)</h2>
+    <br>
+    <div class="patient-info">
+        <pre id="json"></pre>
+    </div>
+</div>
+
+<script>
+    var data = {{ patient|tojson|safe }};
+    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+
+</script>
+
+{% endblock %}
