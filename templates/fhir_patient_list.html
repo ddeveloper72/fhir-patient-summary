@@ -11,7 +11,7 @@
             <br>
             <p>Once you have selected the patient ID required, click on the Search button.</p>
             <br>
-            <form action="/hl7/patient_summary/fhir/patient" method="POST">
+            <form id="patient-form" action="/hl7/patient_summary/fhir/patient" method="POST">
                 <label for="patient_list">Select a Patient:</label>
                 <select class="form-select" id="patient_list" name="patient_id" required title="Select Patient ID">
                     <option selected value="">-- Select a patient --</option>
@@ -33,21 +33,26 @@
                 <button type="submit" class="button">Search</button>
                 <br><br>
             </form>
+            <script>
+                document.getElementById('patient_list').addEventListener('change', function () {
+                    var customPatientIdContainer = document.getElementById('custom-patient-id-container');
+                    if (this.value === 'custom') {
+                        customPatientIdContainer.style.display = 'block';
+                    } else {
+                        customPatientIdContainer.style.display = 'none';
+                    }
+                });
+
+                document.getElementById('patient-form').addEventListener('submit', function (event) {
+                    var patientList = document.getElementById('patient_list');
+                    var customPatientId = document.getElementById('custom_patient_id');
+                    if (patientList.value === 'custom' && customPatientId.value.trim() !== '') {
+                        patientList.value = customPatientId.value.trim();
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
-
-<script>
-    document.getElementById('patient_list').addEventListener('change', function () {
-        var customPatientIdContainer = document.getElementById('custom-patient-id-container');
-        if (this.value === 'custom') {
-            customPatientIdContainer.style.display = 'block';
-        } else {
-            customPatientIdContainer.style.display = 'none';
-        }
-    });
-</script>
-
-
 
 {% endblock %}
