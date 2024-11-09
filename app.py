@@ -5,6 +5,7 @@ import secrets
 from fhirpy import SyncFHIRClient
 from flask import Flask, flash, jsonify, render_template, request, redirect, url_for
 from create_patient_record import create_sample_patient_record
+from fhir.resources.patient import Patient
 
 app = Flask(__name__)
 
@@ -78,26 +79,102 @@ def fhir_patient_list():
     return render_template("fhir_patient_list.html", patients=patient_list)
 
 
+# @app.route("/hl7/patient_summary/fhir/patient", methods=["GET", "POST"])
+# def fhir_patient_summary():
+#     """Get the patient id from the user selection and display the patient summary"""
+
+#     patient_id = request.form.get("patient_id")
+#     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+
+#     try:
+#         patient = client.resources("Patient").get(id=patient_id)
+#     except Exception as e:
+#         flash("The patient id is not found: " + str(e), "alert-danger")
+#         return redirect(url_for("fhir_patient_list"))
+
+#     # Convert FHIR resources to JSON
+#     patient_json = patient.serialize()
+#     patient_info = []
+#     for key, value in patient_json.items():
+#         patient_info.append({"key": key, "value": value})
+
+#     return render_template("fhir_patient_summary.html", patient=patient_info)
+
+
 @app.route("/hl7/patient_summary/fhir/patient", methods=["GET", "POST"])
 def fhir_patient_summary():
-    """Get the patient id from the user selection and display the patient summary"""
+    """Get the patient id from the user selection and display a detailed patient summary"""
 
     patient_id = request.form.get("patient_id")
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
 
     try:
         patient = client.resources("Patient").get(id=patient_id)
+        patient_json = patient.serialize()
+
+        # Convert FHIR resources to JSON
+        patient_info = []
+        for key, value in patient_json.items():
+            patient_info.append({"key": key, "value": value})
+
     except Exception as e:
-        flash("The patient id is not found: " + str(e), "alert-danger")
+        flash("The patient ID was not found: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
-    # Convert FHIR resources to JSON
-    patient_json = patient.serialize()
-    patient_info = []
-    for key, value in patient_json.items():
-        patient_info.append({"key": key, "value": value})
+    # Extract common patient information with fault tolerance
+    profile_urls = patient_json.get("meta", {}).get("profile", [])
+    profile_links = " ".join([f'<a href="{url}" target="_blank">{url}</a>' for url in profile_urls])
 
-    return render_template("fhir_patient_summary.html", patient=patient_info)
+    patient_data = {
+        "id": patient_id,
+        "name": extract_patient_name(patient_json),
+        "birth_date": patient_json.get("birthDate", "N/A"),
+        "gender": patient_json.get("gender", "N/A"),
+        "address": extract_patient_address(patient_json),
+        "phone": extract_patient_telecom(patient_json, "phone"),
+        "email": extract_patient_telecom(patient_json, "email"),
+        "source": patient_json.get("meta", {}).get("source", "N/A"),
+        "version_id": patient_json.get("meta", {}).get("versionId", "N/A"),
+        "last_updated": patient_json.get("meta", {}).get("lastUpdated", "N/A"),
+        "profile": profile_links,
+        "active": patient_json.get("active", "N/A"),
+    }
+
+    return render_template(
+        "fhir_patient_summary.html", patient=patient_data, patient_json=patient_info
+    )
+
+
+# Helper functions to extract information with fault tolerance
+def extract_patient_name(patient_json):
+    """Extracts a readable name from patient data"""
+    names = patient_json.get("name", [])
+    if names:
+        first_name = names[0].get("given", [""])[0]
+        last_name = names[0].get("family", "")
+        return f"{first_name} {last_name}".strip()
+    return "N/A"
+
+
+def extract_patient_address(patient_json):
+    """Extracts the first line of address information if available"""
+    addresses = patient_json.get("address", [])
+    if addresses:
+        line = addresses[0].get("line", [""])[0]
+        city = addresses[0].get("city", "")
+        state = addresses[0].get("state", "")
+        postal = addresses[0].get("postalCode", "")
+        return f"{line}, {city}, {state} {postal}".strip(", ")
+    return "N/A"
+
+
+def extract_patient_telecom(patient_json, telecom_type):
+    """Extracts telecom information based on type"""
+    telecoms = patient_json.get("telecom", [])
+    for telecom in telecoms:
+        if telecom.get("system") == telecom_type:
+            return telecom.get("value", "N/A")
+    return "N/A"
 
 
 @app.errorhandler(404)
@@ -117,6 +194,4 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv("IP"), 
-            port=os.getenv("PORT"), 
-            debug=False)
+    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
