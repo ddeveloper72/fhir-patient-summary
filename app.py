@@ -134,7 +134,7 @@ def fhir_patient_summary():
         "phone": extract_patient_telecom(patient_json, "phone"),
         "email": extract_patient_telecom(patient_json, "email"),
         "source": patient_json.get("meta", {}).get("source", "N/A"),
-        "version_id": patient_json.get("meta", {}).get("versionId", "N/A"),
+        "versionId": patient_json.get("meta", {}).get("versionId", "N/A"),
         "last_updated": patient_json.get("meta", {}).get("lastUpdated", "N/A"),
         "profile": profile_links,
         "active": patient_json.get("active", "N/A"),
