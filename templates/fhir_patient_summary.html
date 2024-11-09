@@ -1,17 +1,82 @@
 {% extends "base.html" %} {% block content %}
 
-<div class="container">
+<div class="intro-container">
     <h2 class="header">Patient Clinical Document (FHIR)</h2>
-    <br>
-    <div class="patient-info">
-        <pre id="json"></pre>
+
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h2>Data Selection</h2>
+                <div class="column">
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <td>{{ patient.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ patient.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Birth Date</th>
+                            <td>{{ patient.birth_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td>{{ patient.gender }}</td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ patient.address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ patient.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ patient.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Source</th>
+                            <td>{{ patient.source }}</td>
+                        </tr>
+                        <tr>
+                            <th>Version ID</th>
+                            <td>{{ patient.versionId }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last Updated</th>
+                            <td>{{ patient.last_updated }}</td>
+                        </tr>
+                        <tr>
+                            <th>Profile</th>
+                            <td>{{ patient.profile|safe }}</td>
+                        </tr>
+                        <tr>
+                            <th>Active</th>
+                            <td>{{ patient.active }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2>Original FHIR JSON Structure</h2>
+                <div class="column">
+                    <pre id="json"></pre>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <a href="{{ url_for('fhir_patient_list') }}">Back to Patient List</a>
 </div>
 
 <script>
-    var data = {{ patient|tojson|safe }};
+    var data = {{ patient_json| tojson | safe }};
     document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
-
 </script>
-
 {% endblock %}
