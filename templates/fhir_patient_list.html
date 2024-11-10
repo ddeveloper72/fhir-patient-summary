@@ -11,7 +11,7 @@
             <br>
             <p>Once you have selected the patient ID required, click on the Search button.</p>
             <br>
-            <form id="patient-form" action="/hl7/patient_summary/fhir/patient" method="POST">
+            <form id="patient-form" action="{{url_for('fhir_patient_summary')}}" method="POST">
                 <label for="patient_list">Select a Patient:</label>
                 <select class="form-select" id="patient_list" name="patient_id" required title="Select Patient ID">
                     <option selected value="">-- Select a patient --</option>
@@ -30,7 +30,7 @@
                         Builder</a> to check the patient ID</P>
                 <p>Note that HAPI Bundle Builder is using a public service. Do not upload any sensitive information</p>
                 <br><br>
-                <button type="submit" class="button">Search</button>
+                <button type="submit" class="btn btn-secondary">Search</button>
                 <br><br>
             </form>
             <script>
