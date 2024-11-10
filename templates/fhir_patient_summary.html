@@ -23,10 +23,12 @@
                         <li><strong>Profile:</strong> {{ patient.profile|safe }}</li>
                         <li><strong>Active:</strong> {{ patient.active }}</li>
                     </ul>
-                    <a href="{{ url_for('edit_fhir_patient', patient_id=patient.id) }}" class="btn btn-secondary"
-                        type="button">Edit</a>
-                    <a href="{{ url_for('fhir_patient_list') }}" class="btn btn-secondary" type="button">Back to
-                        Patient List</a>
+                    <div class="button-inline">
+                        <button href="{{ url_for('edit_fhir_patient', patient_id=patient.id) }}" class="button"
+                            type="button">Edit</button>
+                        <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}'" class="button"
+                            type="button">Return</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,8 +43,7 @@
         </div>
     </div>
 
-    <button class="button" onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Back to Patient
-        List</button>
+    <button class="button" onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Return</button>
 </div>
 
 <script>
