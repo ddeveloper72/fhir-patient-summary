@@ -1,11 +1,12 @@
-import os
 import json
+import os
 import secrets
 
-from fhirpy import SyncFHIRClient
-from flask import Flask, flash, jsonify, render_template, request, redirect, url_for
-from create_patient_record import create_sample_patient_record
 from fhir.resources.patient import Patient
+from fhirpy import SyncFHIRClient
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
+
+from create_patient_record import create_sample_patient_record
 
 app = Flask(__name__)
 
@@ -101,11 +102,19 @@ def fhir_patient_list():
 #     return render_template("fhir_patient_summary.html", patient=patient_info)
 
 
-@app.route("/hl7/patient_summary/fhir/patient", methods=["GET", "POST"])
-def fhir_patient_summary():
+@app.route(
+    "/hl7/patient_summary/fhir/patient",
+    defaults={"patient_id": None},
+    methods=["POST"],
+)
+@app.route("/hl7/patient_summary/fhir/<patient_id>", methods=["GET", "POST"])
+def fhir_patient_summary(patient_id):
     """Get the patient id from the user selection and display a detailed patient summary"""
 
-    patient_id = request.form.get("patient_id")
+    if request.method == "POST":
+        patient_id = request.form.get("patient_id")
+        return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
+
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
 
     try:
@@ -123,7 +132,9 @@ def fhir_patient_summary():
 
     # Extract common patient information with fault tolerance
     profile_urls = patient_json.get("meta", {}).get("profile", [])
-    profile_links = " ".join([f'<a href="{url}" target="_blank">{url}</a>' for url in profile_urls])
+    profile_links = " ".join(
+        [f'<a href="{url}" target="_blank">{url}</a>' for url in profile_urls]
+    )
 
     patient_data = {
         "id": patient_id,
@@ -177,6 +188,62 @@ def extract_patient_telecom(patient_json, telecom_type):
     return "N/A"
 
 
+@app.route("/hl7/patient_summary/fhir/patient/edit", methods=["GET", "POST"])
+def edit_fhir_patient():
+    """Edit a patient record in the HAPI FHIR server."""
+
+    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    patient_id = request.args.get("patient_id")
+
+    if request.method == "POST":
+        # Update patient data with submitted form data
+        form_data = request.form
+        updated_patient = {
+            "id": patient_id,
+            "name": [
+                {
+                    "family": form_data.get("family_name", ""),
+                    "given": [form_data.get("given_name", "")],
+                }
+            ],
+            "birthDate": form_data.get("birth_date", ""),
+            "gender": form_data.get("gender", ""),
+            "address": [
+                {
+                    "line": [form_data.get("address_line", "")],
+                    "city": form_data.get("city", ""),
+                    "state": form_data.get("state", ""),
+                    "postalCode": form_data.get("postal_code", ""),
+                }
+            ],
+            "telecom": [
+                {"system": "phone", "value": form_data.get("phone", "")},
+                {"system": "email", "value": form_data.get("email", "")},
+            ],
+        }
+
+        try:
+            # Update patient on the HAPI FHIR server
+            patient_resource = client.resource("Patient", **updated_patient)
+            patient_resource.id = patient_id  # Set ID for updating
+            patient_resource.save()
+            flash("Patient information updated successfully.", "success")
+            return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
+        except Exception as e:
+            flash("Error updating patient: " + str(e), "alert-danger")
+            return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
+
+    # If GET, render edit form with existing patient data
+    try:
+        patient = client.resources("Patient").get(id=patient_id)
+        patient_json = patient.serialize()
+    except Exception as e:
+        flash("The patient ID was not found: " + str(e), "alert-danger")
+        return redirect(url_for("fhir_patient_list"))
+
+    return render_template("edit_fhir_patient.html", patient=patient_json)
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     """Page not found error handler"""
@@ -194,4 +261,4 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
+    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=True)
