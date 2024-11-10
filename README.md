@@ -8,6 +8,8 @@ The FHIR Patient Summary Development Application is designed to create a FHIR pa
 
 🚧 The conversion to HL7 CDA is currently a work in progress.
 
+![Landing Page](https://github.com/ddeveloper72/fhir-patient-summary/blob/main/static/img/readme/landing_page.png 'Landing Page')
+
 ## Features
 
 - Generate a sample patient document bundle as a FHIR bundle.
@@ -18,6 +20,8 @@ The FHIR Patient Summary Development Application is designed to create a FHIR pa
 - **Note** The synthetic patient information from the FHIR HAPI server belongs to other fellow developers. It would be best practice to only carry out CRUD operations on ones own material.
 - Convert the FHIR JSON bundle into an HL7 CDA document (work in progress).
 - I will need to revisit application which creates the FHIR document bundle, to flesh it our further with additional synthetic clinical information that would be present in the original electronic health record.
+
+![Patient Information](https://github.com/ddeveloper72/fhir-patient-summary/blob/main/static/img/readme/view_patient_info.png 'Patient Information')
 
 ## Sample Code
 
