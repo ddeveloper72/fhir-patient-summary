@@ -105,7 +105,7 @@ def fhir_patient_list():
 @app.route(
     "/hl7/patient_summary/fhir/patient",
     defaults={"patient_id": None},
-    methods=["POST"],
+    methods=["GET", "POST"],
 )
 @app.route("/hl7/patient_summary/fhir/<patient_id>", methods=["GET", "POST"])
 def fhir_patient_summary(patient_id):
@@ -227,7 +227,7 @@ def edit_fhir_patient():
             patient_resource = client.resource("Patient", **updated_patient)
             patient_resource.id = patient_id  # Set ID for updating
             patient_resource.save()
-            flash("Patient information updated successfully.", "success")
+            flash("Patient information updated successfully.", "alert-success")
             return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
         except Exception as e:
             flash("Error updating patient: " + str(e), "alert-danger")
@@ -261,4 +261,4 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=True)
+    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
