@@ -193,6 +193,6 @@ def create_sample_patient_record():
         ]
     )
 
-    print(bundle.json())
+    # print(bundle.json())
     
-    return bundle
+    return bundle.json()
