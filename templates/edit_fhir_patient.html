@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="intro-container">
+    <h2 class="header">Edit Clinical Document (FHIR)</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ url_for('edit_fhir_patient', patient_id=patient.id) }}" method="post">
+                <label for="family_name">Last Name:</label>
+                <input type="text" name="family_name" id="family_name"
+                    value="{{ patient.name[0].family if patient.name else '' }}">
+
+                <label for="given_name">First Name:</label>
+                <input type="text" name="given_name" id="given_name"
+                    value="{{ patient.name[0].given[0] if patient.name and patient.name[0].given else '' }}">
+
+                <label for="birth_date">Birth Date:</label>
+                <input type="date" name="birth_date" id="birth_date" type="date" value="{{ patient.birthDate }}">
+
+                <label for="gender">Gender:</label>
+                <input type="text" name="gender" id="gender" value="{{ patient.gender }}">
+
+                <label for="address_line">Address Line:</label>
+                <input type="text" name="address_line" id="address_line"
+                    value="{{ patient.address[0].line[0] if patient.address else '' }}">
+
+                <label for="city">City:</label>
+                <input type="text" name="city" id="city"
+                    value="{{ patient.address[0].city if patient.address else '' }}">
+
+                <label for="state">State:</label>
+                <input type="text" name="state" id="state"
+                    value="{{ patient.address[0].state if patient.address else '' }}">
+
+                <label for="postal_code">Postal Code:</label>
+                <input type="text" name="postal_code" id="postal_code"
+                    value="{{ patient.address[0].postalCode if patient.address else '' }}">
+
+                <label for="phone">Phone:</label>
+                <input type="tel" name="phone" id="phone"
+                    value="{{ patient.telecom[0].value if patient.telecom and patient.telecom[0].system == 'phone' else '' }}">
+
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email"
+                    value="{{ patient.telecom[1].value if patient.telecom and len(patient.telecom) > 1 and patient.telecom[1].system == 'email' else '' }}">
+                <br>
+                <button class="btn btn-secondary" type="submit">Save Changes</button>
+                <button class="btn btn-secondary" type="button"
+                    onclick="window.location.href='{{ url_for('fhir_patient_summary', patient_id=patient.id) }}'">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+
+    <a href="{{ url_for('fhir_patient_summary', patient_id=patient.id) }}">Back to Patient Summary</a>
+
+</div>
+
+{% endblock %}
