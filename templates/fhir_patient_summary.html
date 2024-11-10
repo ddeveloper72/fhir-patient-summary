@@ -24,7 +24,7 @@
                         <li><strong>Active:</strong> {{ patient.active }}</li>
                     </ul>
                     <div class="button-inline">
-                        <button href="{{ url_for('edit_fhir_patient', patient_id=patient.id) }}" class="button"
+                        <button onclick="window.location.href='{{ url_for('edit_fhir_patient', patient_id=patient.id) }}'" class="button"
                             type="button">Edit</button>
                         <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}'" class="button"
                             type="button">Return</button>
