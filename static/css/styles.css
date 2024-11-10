@@ -207,3 +207,7 @@ form {
   flex-direction: column;
   /* align-items: center; */
 }
+
+span.bold {
+  font-weight: bold;
+}
