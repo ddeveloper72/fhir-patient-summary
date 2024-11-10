@@ -11,7 +11,11 @@ The FHIR Patient Summary Development Application is designed to create a FHIR pa
 ## Features
 
 - Generate a sample patient document bundle as a FHIR bundle.
-- Find HL7 FHIR Patient Summary on the [FHIR HAPI test server](https://hapi.fhir.org/) using this app.
+- Find HL7 FHIR Patient Information on the [FHIR HAPI test server](https://hapi.fhir.org/) using this app.
+- View the FHIR Patient information as JSON and a portion of it rendered as a simple HTML list, created by other developers also working with the FHIR HAPI Server to develop their own CRUD functions/applications.
+- Edit a portion of the patient information viewable from the list, in a form and then save those changes.
+- View the new changes that were made, retrieved from the FHIR HAPI test server.
+- **Note** The synthetic patient information from the FHIR HAPI server belongs to other fellow developers. It would be best practice to only carry out CRUD operations on ones own material.
 - Convert the FHIR JSON bundle into an HL7 CDA document (work in progress).
 - I will need to revisit application which creates the FHIR document bundle, to flesh it our further with additional synthetic clinical information that would be present in the original electronic health record.
 
@@ -28,7 +32,7 @@ def create_sample_patient_record():
         birthDate="1980-05-12",
         name=[{
             "use": "official",
-            "family": "Doe", 
+            "family": "Doe",
             "given": ["Jane"] # list of given names
         }],
         address=[{
@@ -51,7 +55,7 @@ def create_sample_patient_record():
         clinicalStatus={
             "coding": [
                 {
-                    "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical", 
+                    "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
                     "code": "active"
                 }
             ]
@@ -59,7 +63,7 @@ def create_sample_patient_record():
         verificationStatus={
             "coding": [
                 {
-                    "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification", 
+                    "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
                     "code": "confirmed"
                 }
             ]
@@ -67,8 +71,8 @@ def create_sample_patient_record():
         code={
             "coding": [
                 {
-                    "system": "http://snomed.info/sct", 
-                    "code": "227493005", 
+                    "system": "http://snomed.info/sct",
+                    "code": "227493005",
                     "display": "Cashew nuts"
                 }
             ]
@@ -90,7 +94,7 @@ def create_sample_patient_record():
 
 Below is the rendered FHIR JSON bundle.
 
-``` JSON
+```JSON
 {
     "entry": [
         {
