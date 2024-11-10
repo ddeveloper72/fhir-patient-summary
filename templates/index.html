@@ -5,22 +5,26 @@
         <h1>FHIR Patient Summary Development Application</h1>
         <p>This application is designed to create a hard-coded FHIR patient document bundle, which will be presented as
             a JSON file.</p>
-        <a href="/hl7/patient_summary/fhir/json" target="_blank" class="btn btn-secondary" type="button">View Patient
-            Bundle</a>
+        <button onclick="window.location.href='{{ url_for('get_patient_summary') }}'" class="button" type="button">View
+            Patient
+            Bundle</button>
     </div>
     <br>
     <div class="">
         <h2>Find HL7 FHIR Patient Summary on HAPI</h2>
         <p>Select a FHIR patient summary from HAPI FHIR.</p>
-        <a href="/hl7/patient_summary/fhir/select" target="_blank" class="btn btn-secondary" type="button">🔥 FHIR
-            Search Page</a>
+        <p>The document found can be edited but note: <span class="bold">These documents belong to other HAPI FHIR
+                users</span></p>
+        <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}' " class="button" type="button">🔥
+            FHIR
+            Search Page</button>
     </div>
     <br>
     <div class="download">
         <h2>Download HL7 CDA Document</h2>
         <p>🚧 Work in progress: You can also download a converted copy of the FHIR patient summary as an HL7 CDA
             document.</p>
-        <button href="#" target="_blank" class="btn btn-secondary" type="button" disabled>Download HL7 CDA</button>
+        <button onclick="window.location.href='#'" class="button" type="button" disabled>Download HL7 CDA</button>
     </div>
 
 
