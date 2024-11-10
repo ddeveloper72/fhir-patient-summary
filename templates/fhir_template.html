@@ -1,8 +1,22 @@
 {% extends "base.html" %} {% block content %}
 
-<h3 class="header">Clinical Document Architecture (FHIR)</h3>
-<div class="patient-info">
-    {{ fhir | safe }}
+<div class="intro-container">
+    <h3 class="header">Clinical Document Architecture (FHIR)</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="column">
+                <pre id="json"></pre>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+<script>
+    var data = {{ patient_json | safe }};
+    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+</script>
 
 {% endblock %}
