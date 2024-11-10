@@ -23,7 +23,10 @@
                         <li><strong>Profile:</strong> {{ patient.profile|safe }}</li>
                         <li><strong>Active:</strong> {{ patient.active }}</li>
                     </ul>
-                    <a href="{{ url_for('edit_fhir_patient', patient_id=patient.id) }}" class="btn btn-secondary" type="button">Edit</a>
+                    <a href="{{ url_for('edit_fhir_patient', patient_id=patient.id) }}" class="btn btn-secondary"
+                        type="button">Edit</a>
+                    <a href="{{ url_for('fhir_patient_list') }}" class="btn btn-secondary" type="button">Back to
+                        Patient List</a>
                 </div>
             </div>
         </div>
