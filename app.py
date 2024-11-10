@@ -25,40 +25,13 @@ def index():
 def get_patient_summary():
     """Generate a sample patient record and return it as a JSON object"""
 
-    patient_record = create_sample_patient_record()
-    patient_record_json = patient_record.json(indent=4)
+    try:
+        patient_record = create_sample_patient_record()
+        return render_template("fhir_template.html", patient_json=patient_record)
 
-    return jsonify(json.loads(patient_record_json))
-
-
-# @app.route("/generate_cda", methods=["POST"])
-# def generate_cda():
-#     '''Generate a CDA document from the FHIR patient record and return it as a file'''
-
-#     patient_id = request.form.get("patient_id")
-
-#     if not patient_id:
-#         return redirect(url_for("index"))
-#     if patient_id:
-#         patient_record = create_sample_patient_record()
-#         fhir_to_cda(fhir_data=patient_record, patient_identifier=patient_id)
-
-#         return redirect(url_for("download_cda", patient_id=patient_id))
-
-#     return redirect(url_for("index"))
-
-
-# @app.route("/hl7/patient_summary/download_cda", methods=["GET"])
-# def get_hl7_patient_summary_cda(patient_identifier):
-#     """Generate a CDA document from the FHIR patient record and return it as a file"""
-
-#     patient_record = create_sample_patient_record()
-#     fhir_to_cda(fhir_data=patient_record, patient_identifier=patient_identifier)
-
-#     directory = os.path.join(app.root_path, "static/out")
-#     file_name = f"{patient_identifier}_ps_sample_cda.xml"
-
-#     return send_from_directory(directory, file_name, as_attachment=True)
+    except Exception as e:
+        flash("Error generating patient record: " + str(e), "alert-danger")
+        return redirect(url_for("index"))
 
 
 @app.route("/hl7/patient_summary/fhir/select", methods=["GET", "POST"])
@@ -80,26 +53,7 @@ def fhir_patient_list():
     return render_template("fhir_patient_list.html", patients=patient_list)
 
 
-# @app.route("/hl7/patient_summary/fhir/patient", methods=["GET", "POST"])
-# def fhir_patient_summary():
-#     """Get the patient id from the user selection and display the patient summary"""
-
-#     patient_id = request.form.get("patient_id")
-#     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
-
-#     try:
-#         patient = client.resources("Patient").get(id=patient_id)
-#     except Exception as e:
-#         flash("The patient id is not found: " + str(e), "alert-danger")
-#         return redirect(url_for("fhir_patient_list"))
-
-#     # Convert FHIR resources to JSON
-#     patient_json = patient.serialize()
-#     patient_info = []
-#     for key, value in patient_json.items():
-#         patient_info.append({"key": key, "value": value})
-
-#     return render_template("fhir_patient_summary.html", patient=patient_info)
+#
 
 
 @app.route(
