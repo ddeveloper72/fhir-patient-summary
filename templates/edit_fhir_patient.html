@@ -44,8 +44,8 @@
                 <input type="email" name="email" id="email"
                     value="{{ patient.telecom[1].value if patient.telecom and len(patient.telecom) > 1 and patient.telecom[1].system == 'email' else '' }}">
                 <br>
-                <button class="btn btn-secondary" type="submit">Save Changes</button>
-                <button class="btn btn-secondary" type="button"
+                <button class="button" type="submit">Save Changes</button>
+                <button class="button" type="button"
                     onclick="window.location.href='{{ url_for('fhir_patient_summary', patient_id=patient.id) }}'">Cancel</button>
             </form>
         </div>
