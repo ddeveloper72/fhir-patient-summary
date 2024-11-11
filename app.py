@@ -171,8 +171,16 @@ def edit_fhir_patient():
                 }
             ],
             "telecom": [
-                {"system": "phone", "value": form_data.get("phone", "")},
-                {"system": "email", "value": form_data.get("email", "")},
+                {
+                    "system": "phone",
+                    "value": form_data.get("phone", ""),
+                    "use": form_data.get("phone_use", ""),
+                },
+                {
+                    "system": "email",
+                    "value": form_data.get("email", ""),
+                    "use": form_data.get("email_use", ""),
+                },
             ],
         }
 
@@ -198,6 +206,73 @@ def edit_fhir_patient():
     return render_template("edit_fhir_patient.html", patient=patient_json)
 
 
+# # Helper function to compile infomation from the form
+# def compile_patient_name(form_data):
+#     """Compile patient name from form data"""
+#     return [
+#         {
+#             "use": form_data.get("official_name", ""),
+#             "family": form_data.get("family_name", ""),
+#             "given": [form_data.get("given_name", "")],
+#         }
+#     ]
+
+
+# New patient record
+@app.route("/hl7/patient_summary/fhir/patient/new", methods=["GET", "POST"])
+def new_fhir_patient():
+    """Create a new patient record in the HAPI FHIR server."""
+
+    if request.method == "POST":
+        # Create a new patient record with submitted form data
+        form_data = request.form
+        new_patient = {
+            "gender": form_data.get("gender", ""),
+            "birthDate": form_data.get("birth_date", ""),
+            "name": [
+                {
+                    "use": form_data.get("official_name", ""),
+                    "family": form_data.get("family_name", ""),
+                    "given": [form_data.get("given_name", "")],
+                }
+            ],
+            "address": [
+                {
+                    "use": form_data.get("address_use", ""),
+                    "line": [form_data.get("address_line", "")],
+                    "city": form_data.get("city", ""),
+                    "state": form_data.get("state", ""),
+                    "postalCode": form_data.get("postal_code", ""),
+                }
+            ],
+            "telecom": [
+                {
+                    "system": "phone",
+                    "value": form_data.get("phone", ""),
+                    "use": form_data.get("phone_use", ""),
+                },
+                {
+                    "system": "email",
+                    "value": form_data.get("email", ""),
+                    "use": form_data.get("email_use", ""),
+                },
+            ],
+        }
+
+        client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+        try:
+            # Create a new patient on the HAPI FHIR server
+            patient_resource = client.resource("Patient", **new_patient)
+            patient_resource.save()
+            flash("New patient record created successfully.", "alert-success")
+            return redirect(url_for("fhir_patient_list"))
+        except Exception as e:
+            flash("Error creating new patient: " + str(e), "alert-danger")
+            return redirect(url_for("fhir_patient_list"))
+
+    return render_template("new_fhir_patient.html")
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     """Page not found error handler"""
@@ -215,4 +290,4 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
+    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=True)
