@@ -19,6 +19,12 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="official_name">Is the official name?</label>
+                    <input type="checkbox" class="form-check-input form-control" name="official_name" id="official_name"
+                        value="official" {% if patient.name[0].use=='official' %} checked {% endif %}>
+                </div>
+
+                <div class="form-group">
                     <label for="birth_date">Birth Date:</label>
                     <input type="date" class="form-control" name="birth_date" id="birth_date" type="date"
                         value="{{ patient.birthDate }}">
