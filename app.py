@@ -117,8 +117,10 @@ def extract_patient_name(patient_json):
     if names:
         first_name = names[0].get("given", [""])[0]
         last_name = names[0].get("family", "")
+        official_name = names[0].get("use", "")
+        if official_name:
+            return f"{first_name} {last_name} ({official_name})".strip()
         return f"{first_name} {last_name}".strip()
-    return "N/A"
 
 
 def extract_patient_address(patient_json):
@@ -136,12 +138,17 @@ def extract_patient_address(patient_json):
 def extract_patient_telecom(patient_json, telecom_type):
     """Extracts telecom information based on type"""
     telecoms = patient_json.get("telecom", [])
-    for telecom in telecoms:
-        if telecom.get("system") == telecom_type:
-            return telecom.get("value", "N/A")
+    if telecoms:
+        phone_type = telecoms[0].get("use", "")
+        email_type = telecoms[1].get("use", "")
+        if telecom_type == "phone":
+            return telecoms[0].get("value", "N/A") + f" ({phone_type})"
+        if telecom_type == "email":
+            return telecoms[1].get("value", "N/A") + f" ({email_type})"
     return "N/A"
 
-
+            
+    
 @app.route("/hl7/patient_summary/fhir/patient/edit", methods=["GET", "POST"])
 def edit_fhir_patient():
     """Edit a patient record in the HAPI FHIR server."""
@@ -158,6 +165,7 @@ def edit_fhir_patient():
                 {
                     "family": form_data.get("family_name", ""),
                     "given": [form_data.get("given_name", "")],
+                    "use": form_data.get("official_name", ""),
                 }
             ],
             "birthDate": form_data.get("birth_date", ""),
