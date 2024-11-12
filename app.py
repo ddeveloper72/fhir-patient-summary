@@ -131,6 +131,9 @@ def extract_patient_address(patient_json):
         city = addresses[0].get("city", "")
         state = addresses[0].get("state", "")
         postal = addresses[0].get("postalCode", "")
+        address_use = addresses[0].get("use", "")
+        if address_use:
+            return f"{line}, {city}, {state} {postal} ({address_use})".strip(", ")
         return f"{line}, {city}, {state} {postal}".strip(", ")
     return "N/A"
 
@@ -147,8 +150,7 @@ def extract_patient_telecom(patient_json, telecom_type):
             return telecoms[1].get("value", "N/A") + f" ({email_type})"
     return "N/A"
 
-            
-    
+
 @app.route("/hl7/patient_summary/fhir/patient/edit", methods=["GET", "POST"])
 def edit_fhir_patient():
     """Edit a patient record in the HAPI FHIR server."""
@@ -176,6 +178,7 @@ def edit_fhir_patient():
                     "city": form_data.get("city", ""),
                     "state": form_data.get("state", ""),
                     "postalCode": form_data.get("postal_code", ""),
+                    "use": form_data.get("address_use", ""),
                 }
             ],
             "telecom": [
