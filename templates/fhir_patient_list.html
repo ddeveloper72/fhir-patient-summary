@@ -30,9 +30,11 @@
                         Builder</a> to check the patient ID</P>
                 <p>Note that HAPI Bundle Builder is using a public service. Do not upload any sensitive information</p>
                 <br><br>
-                <button type="submit" class="button">Search</button>
-                <button class="button" type="button"
-                    onclick="window.location.href='{{ url_for('new_fhir_patient') }}'">New Patient</button>
+                <div class="button-inline">
+                    <button type="submit" class="button">Search</button>
+                    <button class="button" type="button"
+                        onclick="window.location.href='{{ url_for('new_fhir_patient') }}'">New Patient</button>
+                </div>
                 <br><br>
             </form>
             <script>
