@@ -222,11 +222,15 @@ def edit_fhir_patient():
         flash("The patient ID was not found: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
-    try:
+    if DEVELOPMENT: # Debugging
         return render_template("edit_fhir_patient.html", patient=patient_json)
-    except Exception as e:
-        flash("Error rendering edit form: " + str(e), "alert-danger")
-        return redirect(url_for("fhir_patient_list"))
+   
+    else: # Production
+        try:
+            return render_template("edit_fhir_patient.html", patient=patient_json)
+        except Exception as e:
+            flash("Error rendering edit form: " + str(e), "alert-danger")
+            return redirect(url_for("fhir_patient_list"))
 
 
 # # Helper function to compile infomation from the form
@@ -280,6 +284,9 @@ def new_fhir_patient():
                     "use": form_data.get("email_use", ""),
                 },
             ],
+            "profile": ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"],
+            "active": True,           
+
         }
 
         client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
