@@ -222,7 +222,11 @@ def edit_fhir_patient():
         flash("The patient ID was not found: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
-    return render_template("edit_fhir_patient.html", patient=patient_json)
+    try:
+        return render_template("edit_fhir_patient.html", patient=patient_json)
+    except Exception as e:
+        flash("Error rendering edit form: " + str(e), "alert-danger")
+        return redirect(url_for("fhir_patient_list"))
 
 
 # # Helper function to compile infomation from the form
