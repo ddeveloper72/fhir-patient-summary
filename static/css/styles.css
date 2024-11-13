@@ -83,6 +83,12 @@ main {
   margin-bottom: 20px;
 }
 
+@media (min-width: 768px) {
+  .card {
+    width: 100%;
+  }
+}
+
 .card-body {
   padding: 20px;
   flex-direction: column;
@@ -214,4 +220,22 @@ form {
 
 span.bold {
   font-weight: bold;
+}
+
+form .right {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+
+form .right p {
+  align-items: center;
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+form .right input {
+  margin-top: 5px;
+  align-items: center;
 }
