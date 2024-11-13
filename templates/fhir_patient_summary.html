@@ -3,43 +3,40 @@
 <div class="intro-container">
     <h2 class="header">Patient Clinical Document (FHIR)</h2>
 
-    <div class="row">
-        <div class="card">
-            <div class="card-body">
-                <h2>Data Selection</h2>
-                <div class="column">
+    <div class="card">
+        <div class="card-body">
+            <h2>Data Selection</h2>
+            <div class="column">
 
-                    <ul>
-                        <li><strong>ID:</strong> {{ patient.id }}</li>
-                        <li><strong>Name:</strong> {{ patient.name }}</li>
-                        <li><strong>Birth Date:</strong> {{ patient.birth_date }}</li>
-                        <li><strong>Gender:</strong> {{ patient.gender }}</li>
-                        <li><strong>Address:</strong> {{ patient.address }}</li>
-                        <li><strong>Phone:</strong> {{ patient.phone }}</li>
-                        <li><strong>Email:</strong> {{ patient.email }}</li>
-                        <li><strong>Source:</strong> {{ patient.source }}</li>
-                        <li><strong>Version ID:</strong> {{ patient.versionId }}</li>
-                        <li><strong>Last Updated:</strong> {{ patient.last_updated }}</li>
-                        <li><strong>Profile:</strong> {{ patient.profile|safe }}</li>
-                        <li><strong>Active:</strong> {{ patient.active }}</li>
-                    </ul>
-                    <div class="button-inline">
-                        <button
-                            onclick="window.location.href='{{ url_for('edit_fhir_patient', patient_id=patient.id) }}'"
-                            class="button" type="button">Edit</button>
-                        <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}'" class="button"
-                            type="button">Return</button>
-                    </div>
+                <ul>
+                    <li><strong>ID:</strong> {{ patient.id }}</li>
+                    <li><strong>Name:</strong> {{ patient.name }}</li>
+                    <li><strong>Birth Date:</strong> {{ patient.birth_date }}</li>
+                    <li><strong>Gender:</strong> {{ patient.gender }}</li>
+                    <li><strong>Address:</strong> {{ patient.address }}</li>
+                    <li><strong>Phone:</strong> {{ patient.phone }}</li>
+                    <li><strong>Email:</strong> {{ patient.email }}</li>
+                    <li><strong>Source:</strong> {{ patient.source }}</li>
+                    <li><strong>Version ID:</strong> {{ patient.versionId }}</li>
+                    <li><strong>Last Updated:</strong> {{ patient.last_updated }}</li>
+                    <li><strong>Profile:</strong> {{ patient.profile|safe }}</li>
+                    <li><strong>Active:</strong> {{ patient.active }}</li>
+                </ul>
+                <div class="button-inline">
+                    <button onclick="window.location.href='{{ url_for('edit_fhir_patient', patient_id=patient.id) }}'"
+                        class="button" type="button">Edit</button>
+                    <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}'" class="button"
+                        type="button">Return</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="card">
-            <div class="card-body">
-                <h2>Result Body Payload</h2>
-                <div class="column">
-                    <pre id="json"></pre>
-                </div>
+    <div class="card">
+        <div class="card-body">
+            <h2>Result Body Payload</h2>
+            <div class="column">
+                <pre id="json"></pre>
             </div>
         </div>
     </div>
