@@ -143,10 +143,10 @@ def extract_patient_telecom(patient_json, telecom_type):
     telecoms = patient_json.get("telecom", [])
     if telecoms:
         phone_type = telecoms[0].get("use", "")
-        email_type = telecoms[1].get("use", "")
+        email_type = telecoms[1].get("use", "") if len(telecoms) > 1 else "N/A"
         if telecom_type == "phone":
             return telecoms[0].get("value", "N/A") + f" ({phone_type})"
-        if telecom_type == "email":
+        if telecom_type == "email" and len(telecoms) > 1:
             return telecoms[1].get("value", "N/A") + f" ({email_type})"
     return "N/A"
 
