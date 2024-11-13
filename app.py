@@ -1,12 +1,20 @@
 import json
 import os
 import secrets
+from pathlib import Path
 
+from dotenv import load_dotenv
 from fhir.resources.patient import Patient
 from fhirpy import SyncFHIRClient
-from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
+from flask import (Flask, flash, jsonify, redirect, render_template, request,
+                   url_for)
 
 from create_patient_record import create_sample_patient_record
+
+dotenv_path = Path(".env")
+load_dotenv()
+
+DEVELOPMENT = os.getenv("DEVELOPMENT")
 
 app = Flask(__name__)
 
@@ -301,4 +309,7 @@ def internal_server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
+    if DEVELOPMENT:
+        app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=True)
+    else:
+        app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
