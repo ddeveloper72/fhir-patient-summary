@@ -12,30 +12,47 @@
                         <input type="text" class="form-control" name="family_name" id="family_name"
                             value="{{ patient.name[0].family if patient.name else '' }}">
                     </div>
-    
+
                     <div class="form-group">
                         <label for="given_name">First Name:</label>
                         <input type="text" class="form-control" name="given_name" id="given_name"
                             value="{{ patient.name[0].given[0] if patient.name and patient.name[0].given else '' }}">
                     </div>
-    
+
                     <div class="form-group right">
-                        <p for="official_name">Official name?</p>
-                        <input type="checkbox" class="form-check-input form-control right" name="official_name" id="official_name"
-                            value="official" {% if patient.name[0].use=='official' %} checked {% endif %}>
+                        <input type="checkbox" class="form-check-input form-control right" name="official_name"
+                            id="official_name" value="official" {% if patient.name[0].use=='official' %} checked {%
+                            endif %}>
+                        <label for="official_name">Tick if official name</label>
                     </div>
                 </div>
 
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="birth_date">Birth Date:</label>
+                            <input type="date" class="form-control" name="birth_date" id="birth_date" type="date"
+                                value="{{ patient.birthDate }}">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="gender">Gender:</label>
+                            <select name="gender" class="form-control" id="gender" required>
+                                {% if patient.gender == "female" %}
+                                <option value="female" selected>Female</option>
+                                {% elif patient.gender == "male" %}
+                                <option value="male" selected>Male</option>
+                                {% elif patient.gender == "other"%}
+                                <option value="other" selected>Other</option>
+                                {% endif %}
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label for="birth_date">Birth Date:</label>
-                    <input type="date" class="form-control" name="birth_date" id="birth_date" type="date"
-                        value="{{ patient.birthDate }}">
-                </div>
-
-                <div class="form-group">
-                    <label for="gender">Gender:</label>
-                    <input type="text" class="form-control" name="gender" id="gender" value="{{ patient.gender }}">
                 </div>
 
                 <div class="form-group">
@@ -49,7 +66,7 @@
                     <select name="address_use" class="form-control" id="address_use" required>
                         {% if patient.address[0].use == 'home' %}
                         <option value="home" selected>Home</option>
-                        {% else %}
+                        {% elif patient.telecom|length > 1 %}
                         <option value="work" selected>Work</option>
                         {% endif %}
                         <option value="home">Home</option>
@@ -75,50 +92,66 @@
                         value="{{ patient.address[0].postalCode if patient.address else '' }}">
                 </div>
 
-                <div class="form-group">
-                    <label for="phone">Phone:</label>
-                    <input type="tel" class="form-control" name="phone" id="phone"
-                        value="{{ patient.telecom[0].value if patient.telecom[0].system == 'phone' else '' }}">
-                </div>
-
-                {% if not patient.telecom[0].value and patient.telecom[0].system != 'phone' %}
-                {% else %}
-                <div class="form-group
-                    <label for=" phone_use">Phone Type</label>
-                    <select class="form-control" id="phone_use" name="phone_use" required>
-                        {% if patient.telecom[0].use == 'home' %}
-                        <option value="home" selected>Home</option>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            <input type="tel" class="form-control" name="phone" id="phone"
+                                value="{{ patient.telecom[0].value if patient.telecom[0].system == 'phone' else '' }}">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        {% if not patient.telecom[0].value and patient.telecom[0].system != 'phone' %}
                         {% else %}
-                        <option value="work" selected>Work</option>
+                        <div class="form-group
+                            <label for=" phone_use">Phone Type</label>
+                            <select class="form-control" id="phone_use" name="phone_use" required>
+                                {% if patient.telecom[0].use == 'home' %}
+                                <option value="home" selected>Home</option>
+                                {% else %}
+                                <option value="work" selected>Work</option>
+                                {% endif %}
+                                <option value="home">Home</option>
+                                <option value="work">Work</option>
+                            </select>
+                        </div>
                         {% endif %}
-                        <option value="home">Home</option>
-                        <option value="work">Work</option>
-                    </select>
-                </div>
-                {% endif %}
-
-
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" class="form-control" name="email" id="email"
-                        value="{{ patient.telecom[1].value if patient.telecom[1].system == 'email' else '' }}">
+                    </div>
                 </div>
 
-                {% if not patient.telecom[1].value and patient.telecom[1].system != 'email' %}
-                {% else %}
-                <div class="form-group">
-                    <label for="email_use">Email Type</label>
-                    <select class="form-control" id="email_use" name="email_use" required>
-                        {% if patient.telecom[1].use == 'home' %}
-                        <option value="home" selected>Home</option>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" name="email" id="email"
+                                value="{{ patient.telecom[1].value if patient.telecom|length > 1 and patient.telecom[1].system == 'email' else '' }}"
+                                {% if patient.telecom|length> 1 %} {% if patient.telecom[1].system == 'email' %}
+                            value="{{ patient.telecom[1].value }}" {% else %} value="" {% endif %} {% else %} value=""
+                            {% endif %}>
+                        </div>
+                    </div>
+                    <div class="col-md">
+
+                        {% if patient.telecom|length > 1 and not patient.telecom[1].value and patient.telecom[1].system
+                        != 'email' %}
                         {% else %}
-                        <option value="work" selected>Work</option>
+                        <div class="form-group">
+                            <label for="email_use">Email Type</label>
+                            <select class="form-control" id="email_use" name="email_use" required>
+
+                                {% if patient.telecom|length > 1 and patient.telecom[1].use == 'home' %}
+                                <option value="home" selected>Home</option>
+                                {% else %}
+                                <option value="work" selected>Work</option>
+                                {% endif %}
+                                <option value="home">Home</option>
+                                <option value="work">Work</option>
+                            </select>
+                        </div>
                         {% endif %}
-                        <option value="home">Home</option>
-                        <option value="work">Work</option>
-                    </select>
+                    </div>
+
                 </div>
-                {% endif %}
 
 
                 <br>
