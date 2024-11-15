@@ -22,9 +22,27 @@
                     <li><strong>Profile:</strong> {{ patient.profile|safe }}</li>
                     <li><strong>Active:</strong> {{ patient.active }}</li>
                 </ul>
+                <br>
+                <ul>
+                    <li><strong>Marital Status:</strong>{{ patient.marital_status}}</li>
+                    <li><strong>Multiple Birth:</strong>{{ patient.multiple_birth}}</li>
+                    <li><strong>Deceased:</strong>{{ patient.deceased}}</li>
+                    <li><strong>Language:</strong>{{ patient.language}}</li>
+                    <li><strong>Communication:</strong>{{ patient.communication}}</li>
+                    <li><strong>General Practitioner:</strong>{{ patient.general_practitioner}}</li>
+                    <li><strong>Managing Organization:</strong
+                        >{{ patient.managing_organization}}</li>
+                    <li><strong>Link:</strong>{{ patient.link}}</li>
+                    <li><strong>Photo:</strong>{{ patient.photo}}</li>
+                    <li><strong>Text:</strong>{{ patient.text}}</li>
+                    
+                </ul>
                 <div class="button-inline">
                     <button onclick="window.location.href='{{ url_for('edit_fhir_patient', patient_id=patient.id) }}'"
                         class="button" type="button">Edit</button>
+                    <button class="button"
+                        onclick="window.location.href='{{ url_for('delete_fhir_patient', patient_id=patient.id) }}'"
+                        class="button" type="button">Delete</button>
                     <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}'" class="button"
                         type="button">Return</button>
                 </div>
