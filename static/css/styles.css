@@ -232,10 +232,15 @@ form .right {
 form .right p {
   align-items: center;
   margin-top: 5px;
-  margin-right: 10px;
 }
 
 form .right input {
-  margin-top: 5px;
+  margin-top: 4px;
+  margin-right: 10px;
   align-items: center;
+}
+
+
+.form-group label {
+  font-weight: bold;
 }
