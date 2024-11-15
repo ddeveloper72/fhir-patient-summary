@@ -111,6 +111,19 @@ def fhir_patient_summary(patient_id):
         "last_updated": patient_json.get("meta", {}).get("lastUpdated", "N/A"),
         "profile": profile_links,
         "active": patient_json.get("active", "N/A"),
+        "marital_status": patient_json.get("maritalStatus", "N/A"),
+        "deceased": patient_json.get("deceasedDateTime", "N/A"),
+        "deceased_age": patient_json.get("deceasedAge", "N/A"),
+        "multiple_birth": patient_json.get("multipleBirthBoolean", "N/A"),
+        "communication": patient_json.get("communication", "N/A"),
+        "language": patient_json.get("language", "N/A"),
+        "contact": extract_patient_contact(patient_json, "contact"),
+        "general_practitioner": patient_json.get("generalPractitioner", "N/A"),
+        "managing_organization": patient_json.get("managingOrganization", "N/A"),
+        "link": patient_json.get("link", "N/A"),
+        "photo": patient_json.get("photo", "N/A"),  
+        "text": patient_json.get("text", "N/A"),
+
     }
 
     return render_template(
@@ -157,6 +170,23 @@ def extract_patient_telecom(patient_json, telecom_type):
         if telecom_type == "email" and len(telecoms) > 1:
             return telecoms[1].get("value", "N/A") + f" ({email_type})"
     return "N/A"
+
+def extract_patient_contact(patient_json, contact_type):
+    """Extracts contact information based on type"""
+    contacts = patient_json.get("contact", [])
+    if contacts:
+        relationship = contacts[0].get("relationship", "")
+        name = contacts[0].get("name", "")
+        telecom = contacts[0].get("telecom", "")
+        address = contacts[0].get("address", "")
+        gender = contacts[0].get("gender", "")
+        organization = contacts[0].get("organization", "")
+        period = contacts[0].get("period", "")
+        if contact_type == "contact":
+            return contacts[0].get("relationship", "N/A") + f" ({relationship})"
+        
+    return "N/A"
+
 
 
 @app.route("/hl7/patient_summary/fhir/patient/edit", methods=["GET", "POST"])
@@ -233,17 +263,6 @@ def edit_fhir_patient():
             return redirect(url_for("fhir_patient_list"))
 
 
-# # Helper function to compile infomation from the form
-# def compile_patient_name(form_data):
-#     """Compile patient name from form data"""
-#     return [
-#         {
-#             "use": form_data.get("official_name", ""),
-#             "family": form_data.get("family_name", ""),
-#             "given": [form_data.get("given_name", "")],
-#         }
-#     ]
-
 
 # New patient record
 @app.route("/hl7/patient_summary/fhir/patient/new", methods=["GET", "POST"])
@@ -301,6 +320,33 @@ def new_fhir_patient():
             return redirect(url_for("fhir_patient_list"))
 
     return render_template("new_fhir_patient.html")
+
+
+# Delete patient record
+@app.route("/hl7/patient_summary/fhir/patient/delete", methods=["GET", "POST"])
+def delete_fhir_patient():
+    """Delete a patient record from the HAPI FHIR server."""
+
+    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    patient_id = request.args.get("patient_id")
+
+    if request.method == "POST":
+        try:
+            # Delete patient record from the HAPI FHIR server
+            patient = client.resources("Patient").get(id=patient_id)
+            patient.delete()
+            flash("Patient record deleted successfully.", "alert-success")
+            return redirect(url_for("fhir_patient_list"))
+        except Exception as e:
+            flash("Error deleting patient record: " + str(e), "alert-danger")
+            return redirect(url_for("fhir_patient_list"))
+
+    try:
+        patient = client.resources("Patient").get(id=patient_id)
+        return render_template("delete_fhir_patient.html", patient=patient)
+    except Exception as e:
+        flash("Error fetching patient record: " + str(e), "alert-danger")
+        return redirect(url_for("fhir_patient_list"))
 
 
 @app.errorhandler(404)
