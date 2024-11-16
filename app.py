@@ -6,8 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fhir.resources.patient import Patient
 from fhirpy import SyncFHIRClient
-from flask import (Flask, flash, jsonify, redirect, render_template, request,
-                   url_for)
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
 
 from create_patient_record import create_sample_patient_record
 
@@ -101,6 +100,7 @@ def fhir_patient_summary(patient_id):
     patient_data = {
         "id": patient_id,
         "name": extract_patient_name(patient_json),
+        "identifier": extract_patient_identifier(patient_json, "identifier"),
         "birth_date": patient_json.get("birthDate", "N/A"),
         "gender": patient_json.get("gender", "N/A"),
         "address": extract_patient_address(patient_json),
@@ -115,15 +115,13 @@ def fhir_patient_summary(patient_id):
         "deceased": patient_json.get("deceasedDateTime", "N/A"),
         "deceased_age": patient_json.get("deceasedAge", "N/A"),
         "multiple_birth": patient_json.get("multipleBirthBoolean", "N/A"),
-        "communication": patient_json.get("communication", "N/A"),
-        "language": patient_json.get("language", "N/A"),
+        "communication": extract_patient_languages(patient_json, "language"),
         "contact": extract_patient_contact(patient_json, "contact"),
         "general_practitioner": patient_json.get("generalPractitioner", "N/A"),
         "managing_organization": patient_json.get("managingOrganization", "N/A"),
         "link": patient_json.get("link", "N/A"),
-        "photo": patient_json.get("photo", "N/A"),  
+        "photo": patient_json.get("photo", "N/A"),
         "text": patient_json.get("text", "N/A"),
-
     }
 
     return render_template(
@@ -142,6 +140,17 @@ def extract_patient_name(patient_json):
         if official_name:
             return f"{first_name} {last_name} ({official_name})".strip()
         return f"{first_name} {last_name}".strip()
+
+
+def extract_patient_identifier(patient_json):
+    """Extracts identifier information based on type"""
+    identifiers = patient_json.get("identifier", [])
+    identifier_list = []
+    for identifier in identifiers:
+        identifier_system = identifier.get("system", "")
+        identifier_value = identifier.get("value", "")
+        identifier_list.append(f"{identifier_system} - {identifier_value}")
+    return ", ".join(identifier_list) if identifier_list else "N/A"
 
 
 def extract_patient_address(patient_json):
@@ -171,6 +180,7 @@ def extract_patient_telecom(patient_json, telecom_type):
             return telecoms[1].get("value", "N/A") + f" ({email_type})"
     return "N/A"
 
+
 def extract_patient_contact(patient_json, contact_type):
     """Extracts contact information based on type"""
     contacts = patient_json.get("contact", [])
@@ -184,9 +194,22 @@ def extract_patient_contact(patient_json, contact_type):
         period = contacts[0].get("period", "")
         if contact_type == "contact":
             return contacts[0].get("relationship", "N/A") + f" ({relationship})"
-        
+
     return "N/A"
 
+
+def extract_patient_languages(patient_json, language_type):
+    """Extracts language information based on type"""
+    languages = patient_json.get("communication", [])
+    language_list = []
+    for language in languages:
+        language_code = (
+            language.get("language", {}).get("coding", [{}])[0].get("display", "N/A")
+        )
+        preferred = language.get("preferred", False)
+        preferred_text = " (preferred)" if preferred else ""
+        language_list.append(f"{language_code}{preferred_text}")
+    return ", ".join(language_list) if language_list else "N/A"
 
 
 @app.route("/hl7/patient_summary/fhir/patient/edit", methods=["GET", "POST"])
@@ -252,16 +275,15 @@ def edit_fhir_patient():
         flash("The patient ID was not found: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
-    if DEVELOPMENT: # Debugging
+    if DEVELOPMENT:  # Debugging
         return render_template("edit_fhir_patient.html", patient=patient_json)
-   
-    else: # Production
+
+    else:  # Production
         try:
             return render_template("edit_fhir_patient.html", patient=patient_json)
         except Exception as e:
             flash("Error rendering edit form: " + str(e), "alert-danger")
             return redirect(url_for("fhir_patient_list"))
-
 
 
 # New patient record
@@ -303,9 +325,10 @@ def new_fhir_patient():
                     "use": form_data.get("email_use", ""),
                 },
             ],
-            "profile": ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"],
-            "active": True,           
-
+            "profile": [
+                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+            ],
+            "active": True,
         }
 
         client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
