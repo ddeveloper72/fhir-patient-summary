@@ -11,6 +11,7 @@
                 <ul>
                     <li><strong>ID:</strong> {{ patient.id }}</li>
                     <li><strong>Name:</strong> {{ patient.name }}</li>
+                    <li><strong>Identifier:</strong> {{ patient.identifier }}</li>
                     <li><strong>Birth Date:</strong> {{ patient.birth_date }}</li>
                     <li><strong>Gender:</strong> {{ patient.gender }}</li>
                     <li><strong>Address:</strong> {{ patient.address }}</li>
@@ -24,18 +25,19 @@
                 </ul>
                 <br>
                 <ul>
-                    <li><strong>Marital Status:</strong>{{ patient.marital_status}}</li>
-                    <li><strong>Multiple Birth:</strong>{{ patient.multiple_birth}}</li>
-                    <li><strong>Deceased:</strong>{{ patient.deceased}}</li>
-                    <li><strong>Language:</strong>{{ patient.language}}</li>
-                    <li><strong>Communication:</strong>{{ patient.communication}}</li>
-                    <li><strong>General Practitioner:</strong>{{ patient.general_practitioner}}</li>
+                    <li><strong>Marital Status:</strong> {{ patient.marital_status}}</li>
+                    <li><strong>Multiple Birth:</strong> {{ patient.multiple_birth}}</li>
+                    {% if patient.deceased != 'N/A' %}
+                    <li><strong>Deceased:</strong> {{ patient.deceased }}</li>
+                    {% endif %}
+                    <li><strong>Communication:</strong> {{ patient.communication }}</li>
+                    <li><strong>General Practitioner:</strong> {{ patient.general_practitioner}}</li>
                     <li><strong>Managing Organization:</strong
-                        >{{ patient.managing_organization}}</li>
-                    <li><strong>Link:</strong>{{ patient.link}}</li>
-                    <li><strong>Photo:</strong>{{ patient.photo}}</li>
-                    <li><strong>Text:</strong>{{ patient.text}}</li>
-                    
+                        > {{ patient.managing_organization}}</li>
+                    <li><strong>Link:</strong> {{ patient.link}}</li>
+                    <li><strong>Photo:</strong> {{ patient.photo}}</li>
+                    <li><strong>Text:</strong> {{ patient.text}}</li>
+
                 </ul>
                 <div class="button-inline">
                     <button onclick="window.location.href='{{ url_for('edit_fhir_patient', patient_id=patient.id) }}'"
