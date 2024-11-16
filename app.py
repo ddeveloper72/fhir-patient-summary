@@ -121,7 +121,7 @@ def fhir_patient_summary(patient_id):
         "managing_organization": patient_json.get("managingOrganization", "N/A"),
         "link": patient_json.get("link", "N/A"),
         "photo": patient_json.get("photo", "N/A"),
-        "text": patient_json.get("text", "N/A"),
+        "text": extract_patient_text(patient_json, "text"),
     }
 
     return render_template(
@@ -142,7 +142,7 @@ def extract_patient_name(patient_json):
         return f"{first_name} {last_name}".strip()
 
 
-def extract_patient_identifier(patient_json):
+def extract_patient_identifier(patient_json, identifier_type):
     """Extracts identifier information based on type"""
     identifiers = patient_json.get("identifier", [])
     identifier_list = []
@@ -210,6 +210,14 @@ def extract_patient_languages(patient_json, language_type):
         preferred_text = " (preferred)" if preferred else ""
         language_list.append(f"{language_code}{preferred_text}")
     return ", ".join(language_list) if language_list else "N/A"
+
+
+def extract_patient_text(patient_json, text_type):
+    """Extracts text information based on type"""
+    text = patient_json.get("text", {})
+    if text_type == "text":
+        return text.get("div", "N/A")
+    return "N/A"
 
 
 @app.route("/hl7/patient_summary/fhir/patient/edit", methods=["GET", "POST"])
