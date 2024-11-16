@@ -1,12 +1,12 @@
-import json
+# import json
 import os
 import secrets
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fhir.resources.patient import Patient
+# from fhir.resources.patient import Patient
 from fhirpy import SyncFHIRClient
-from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for
 
 from create_patient_record import create_sample_patient_record
 
@@ -100,7 +100,7 @@ def fhir_patient_summary(patient_id):
     patient_data = {
         "id": patient_id,
         "name": extract_patient_name(patient_json),
-        "identifier": extract_patient_identifier(patient_json, "identifier"),
+        "identifier": extract_patient_identifier(patient_json),
         "birth_date": patient_json.get("birthDate", "N/A"),
         "gender": patient_json.get("gender", "N/A"),
         "address": extract_patient_address(patient_json),
@@ -142,7 +142,7 @@ def extract_patient_name(patient_json):
         return f"{first_name} {last_name}".strip()
 
 
-def extract_patient_identifier(patient_json, identifier_type):
+def extract_patient_identifier(patient_json):
     """Extracts identifier information based on type"""
     identifiers = patient_json.get("identifier", [])
     identifier_list = []
