@@ -147,10 +147,12 @@
                             <label for="marital_status">Marital Status</label>
                             <select class="form-control" id="marital_status" name="marital_status" required>
                                 <option value="" disabled selected>Select</option>
-                                <option value="single">Single</option>
-                                <option value="married">Married</option>
-                                <option value="divorced">Divorced</option>
-                                <option value="widowed">Widowed</option>
+                                <option value="M">Married</option>
+                                <option value="S">Single</option>
+                                <option value="D">Divorced</option>
+                                <option value="W">Widowed</option> 
+                                <option value="L">Legally Separated</option> 
+                                <option value="U">Unknown</option>
                             </select>
                         </div>
                     </div>
@@ -199,7 +201,7 @@
                     </div>
                     <div class="col-md">
                         <div class="form-group" id="date_of_death_group">
-                            <label for="deceased">Date & time of Death</label>
+                            <label for="deceased">Deceased Date:</label>
                             <input type="date" class="form-control" id="deceased" name="deceased">
                         </div>
                     </div>
@@ -266,7 +268,7 @@
                                 <div class="form-group">
                                     <label for="link_other_refrence">Link Reference</label>
                                     <input type="text" class="form-control" id="link_other_refrence"
-                                        name="link_other_refrence">
+                                        name="link_other_reference">
                                 </div>
                             </div>
                         </div>
@@ -292,7 +294,7 @@
                         <div class="row g-2">
                             <label for="languages">Languages Spoken</label>
                             <div class="col-md">
-                                <div class="form-group">
+                                <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="language_french" name="languages" value="french">
                                     <label class="form-check-label" for="language_french">French</label>
                                 </div>
@@ -438,7 +440,7 @@
                                 <div class="form-group">
                                     <label for="contact_relationship">Relationship</label>
                                     <select type="text" class="form-control" id="contact_relationship"
-                                        name="contact_relationship" required>
+                                        name="contact_relationship" value="relationship" required>
                                         <option value="" disabled selected>Select</option>
                                         <option value="BP">Billing contact person</option>
                                         <option value="CP">Contact person</option>
