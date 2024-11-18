@@ -251,20 +251,20 @@ def edit_fhir_patient():
             "id": patient_id,
             "name": [
                 {
+                    "use": form_data.get("official_name", ""),
                     "family": form_data.get("family_name", ""),
                     "given": [form_data.get("given_name", "")],
-                    "use": form_data.get("official_name", ""),
                 }
             ],
             "birthDate": form_data.get("birth_date", ""),
             "gender": form_data.get("gender", ""),
             "address": [
                 {
+                    "use": form_data.get("address_use", ""),
                     "line": [form_data.get("address_line", "")],
                     "city": form_data.get("city", ""),
                     "state": form_data.get("state", ""),
                     "postalCode": form_data.get("postal_code", ""),
-                    "use": form_data.get("address_use", ""),
                 }
             ],
             "telecom": [
@@ -279,101 +279,163 @@ def edit_fhir_patient():
                     "use": form_data.get("email_use", ""),
                 },
             ],
+            "profile": [
+                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+            ],
             "active": True,
-            "maritalStatus": form_data.get("marital_status", ""),
-            "deceasedDateTime": form_data.get("deceased", ""),
-            "deceasedAge": form_data.get("deceased_age", ""),
-            "multipleBirthBoolean": form_data.get("multiple_birth", ""),
+            "maritalStatus": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+                        "code": form_data.get("marital_status", ""),
+                        "display": form_data.get("marital_status", ""),
+                    }
+                ]
+            },
+            "deceased": [
+                {
+                    "dateTime": form_data.get("deceased", ""),
+                    "deceasedBoolean": form_data.get("deceased_boolean", ""),
+                },
+            ],
+            "multipleBirth": [
+                {
+                    "multipleBirthBoolean": form_data.get("multiple_birth", ""),
+                    "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
+                },
+            ],
             "communication": [
                 {
                     "language": {
                         "coding": [
                             {
                                 "system": "urn:ietf:bcp:47",
-                                "code": form_data.get("language", ""),
-                                "display": form_data.get("language", ""),
+                                "code": get_language_code(language),
+                                "display": language,
                             }
                         ]
                     },
-                    "preferred": True,
+                    "preferred": language == form_data.get("preferred_language", ""),
                 }
+                for language in form_data.getlist("languages")
             ],
             "contact": [
                 {
-                    "relationship": [
+                    "reference": [
                         {
-                            "coding": [
+                            "relationship": [
                                 {
-                                    "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                                    "code": form_data.get("relationship", ""),
-                                    "display": form_data.get("relationship", ""),
+                                    "coding": [
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                                            "code": form_data.get("relationship", ""),
+                                            "display": form_data.get(
+                                                "relationship", ""
+                                            ),
+                                        }
+                                    ]
                                 }
-                            ]
-                        }
-                    ],
-                    "name": {
-                        "family": form_data.get("contact_family_name", ""),
-                        "given": [form_data.get("contact_given_name", "")],
-                    },
-                    "telecom": [
-                        {
-                            "system": "phone",
-                            "value": form_data.get("contact_phone", ""),
-                            "use": form_data.get("contact_phone_use", ""),
+                            ],
+                            "name": {
+                                "family": form_data.get("contact_family_name", ""),
+                                "given": [form_data.get("contact_given_name", "")],
+                            },
+                            "telecom": [
+                                {
+                                    "system": "phone",
+                                    "value": form_data.get("contact_phone", ""),
+                                    "use": form_data.get("contact_phone_use", ""),
+                                },
+                                {
+                                    "system": "email",
+                                    "value": form_data.get("contact_email", ""),
+                                    "use": form_data.get("contact_email_use", ""),
+                                },
+                            ],
+                            "address": [
+                                {
+                                    "use": form_data.get("contact_address_use", ""),
+                                    "line": [form_data.get("contact_address_line", "")],
+                                    "city": form_data.get("contact_city", ""),
+                                    "state": form_data.get("contact_state", ""),
+                                    "postalCode": form_data.get(
+                                        "contact_postal_code", ""
+                                    ),
+                                }
+                            ],
+                            "gender": form_data.get("contact", ""),
+                            "organization": {
+                                "reference": form_data.get("contact_organization", ""),
+                                "display": form_data.get("contact_organization", ""),
+                            },
+                            "period": {
+                                "start": form_data.get("contact_start", ""),
+                                "end": form_data.get("contact_end", ""),
+                            },
                         },
-                        {
-                            "system": "email",
-                            "value": form_data.get("contact_email", ""),
-                            "use": form_data.get("contact_email_use", ""),
-                        },
                     ],
-                    "address": [
-                        {
-                            "line": [form_data.get("contact_address_line", "")],
-                            "city": form_data.get("contact_city", ""),
-                            "state": form_data.get("contact_state", ""),
-                            "postalCode": form_data.get("contact_postal_code", ""),
-                            "use": form_data.get("contact_address_use", ""),
-                        }
-                    ],
-                    "gender": form_data.get("contact", ""),
-                    "organization": {
-                        "reference": form_data.get("contact_organization", ""),
-                        "display": form_data.get("contact_organization", ""),
-                    },
-                    "period": {
-                        "start": form_data.get("contact_start", ""),
-                        "end": form_data.get("contact_end", ""),
-                    },
                 },
             ],
-            "generalPractitioner": [
-                {
-                    "reference": form_data.get("general_practitioner", ""),
-                    "display": form_data.get("general_practitioner", ""),
-                }
-            ],
-            "managingOrganization": {
-                "reference": form_data.get("managing_organization", ""),
-                "display": form_data.get("managing_organization", ""),
+            "generalPractitioner": {
+                "reference": [
+                    {
+                        "reference": form_data.get("general_practitioner", ""),
+                        "type": "Practitioner",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("general_practitioner", ""),
+                            },
+                        ],
+                        "display": form_data.get("general_practitioner", ""),
+                    }
+                ]
             },
-            "link": [
-                {
-                    "other": {
+            "managingOrganization": {
+                "reference": [
+                    {
+                        "reference": form_data.get("managing_organization", ""),
+                        "type": "Organization",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("managing_organization", ""),
+                            },
+                        ],
+                        "display": form_data.get("managing_organization", ""),
+                    }
+                ]
+            },
+            "link": {
+                "reference": [
+                    {
                         "reference": form_data.get("link", ""),
+                        "type": "Patient",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("link", ""),
+                            },
+                        ],
                         "display": form_data.get("link", ""),
                     }
-                }
-            ],
-            "photo": [
-                {
-                    "url": form_data.get("photo", ""),
-                }
-            ],
-            "text": {
-                "div": form_data.get("text", ""),
-                "status": "generated",
+                ],
             },
+            "photo": {
+                "reference": [
+                    {
+                        "reference": form_data.get("photo", ""),
+                        "type": "Photo",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("photo", ""),
+                            },
+                        ],
+                        "display": form_data.get("photo", ""),
+                    }
+                ],
+            }
         }
 
         try:
@@ -419,189 +481,202 @@ def new_fhir_patient():
             "gender": form_data.get("gender", ""),
             "birthDate": form_data.get("birth_date", ""),
             "name": [
-            {
-                "use": form_data.get("official_name", ""),
-                "family": form_data.get("family_name", ""),
-                "given": [form_data.get("given_name", "")],
-            }
+                {
+                    "use": form_data.get("official_name", ""),
+                    "family": form_data.get("family_name", ""),
+                    "given": [form_data.get("given_name", "")],
+                }
             ],
             "address": [
-            {
-                "use": form_data.get("address_use", ""),
-                "line": [form_data.get("address_line", "")],
-                "city": form_data.get("city", ""),
-                "state": form_data.get("state", ""),
-                "postalCode": form_data.get("postal_code", ""),
-            }
+                {
+                    "use": form_data.get("address_use", ""),
+                    "line": [form_data.get("address_line", "")],
+                    "city": form_data.get("city", ""),
+                    "state": form_data.get("state", ""),
+                    "postalCode": form_data.get("postal_code", ""),
+                }
             ],
             "telecom": [
-            {
-                "system": "phone",
-                "value": form_data.get("phone", ""),
-                "use": form_data.get("phone_use", ""),
-            },
-            {
-                "system": "email",
-                "value": form_data.get("email", ""),
-                "use": form_data.get("email_use", ""),
-            },
+                {
+                    "system": "phone",
+                    "value": form_data.get("phone", ""),
+                    "use": form_data.get("phone_use", ""),
+                },
+                {
+                    "system": "email",
+                    "value": form_data.get("email", ""),
+                    "use": form_data.get("email_use", ""),
+                },
             ],
             "profile": [
-            "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+                "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
             ],
             "active": True,
             "maritalStatus": {
-            "coding": [
-                {
-                "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
-                "code": form_data.get("marital_status", ""),
-                "display": form_data.get("marital_status", ""),
-                }
-            ]
-            },
-            "deceased": [
-            {
-                "dateTime": form_data.get("deceased", ""),
-                "deceasedBoolean": form_data.get("deceased_boolean", ""),
-            },
-            ],
-            "multipleBirth": [
-            {
-                "multipleBirthBoolean": form_data.get("multiple_birth", ""),
-                "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
-            },
-            ],
-            "communication": [
-            {
-                "language": {
                 "coding": [
                     {
-                    "system": "urn:ietf:bcp:47",
-                    "code": get_language_code(language),
-                    "display": language,
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+                        "code": form_data.get("marital_status", ""),
+                        "display": form_data.get("marital_status", ""),
                     }
                 ]
+            },
+            "deceased": [
+                {
+                    "dateTime": form_data.get("deceased", ""),
+                    "deceasedBoolean": form_data.get("deceased_boolean", ""),
                 },
-                "preferred": language == form_data.get("preferred_language", ""),
-            }
-            for language in form_data.getlist("languages")
+            ],
+            "multipleBirth": [
+                {
+                    "multipleBirthBoolean": form_data.get("multiple_birth", ""),
+                    "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
+                },
+            ],
+            "communication": [
+                {
+                    "language": {
+                        "coding": [
+                            {
+                                "system": "urn:ietf:bcp:47",
+                                "code": get_language_code(language),
+                                "display": language,
+                            }
+                        ]
+                    },
+                    "preferred": language == form_data.get("preferred_language", ""),
+                }
+                for language in form_data.getlist("languages")
             ],
             "contact": [
-            {
-                "reference": [
                 {
-                    "relationship": [
-                    {
-                        "coding": [
+                    "reference": [
                         {
-                            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                            "code": form_data.get("relationship", ""),
-                            "display": form_data.get(
-                            "relationship", ""
-                            ),
-                        }
-                        ]
-                    }
+                            "relationship": [
+                                {
+                                    "coding": [
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                                            "code": form_data.get("relationship", ""),
+                                            "display": form_data.get(
+                                                "relationship", ""
+                                            ),
+                                        }
+                                    ]
+                                }
+                            ],
+                            "name": {
+                                "family": form_data.get("contact_family_name", ""),
+                                "_family": {
+                                    "extension": [
+                                        {
+                                            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
+                                            "valueString": form_data.get(
+                                                "contact_family_name_prefix", ""
+                                            ),
+                                        }
+                                    ]
+                                },
+                                "given": [form_data.get("contact_given_name", "")],
+                            },
+                            "telecom": [
+                                {
+                                    "system": "phone",
+                                    "value": form_data.get("contact_phone", ""),
+                                    "use": form_data.get("contact_phone_use", ""),
+                                },
+                                {
+                                    "system": "email",
+                                    "value": form_data.get("contact_email", ""),
+                                    "use": form_data.get("contact_email_use", ""),
+                                },
+                            ],
+                            "address": [
+                                {
+                                    "use": form_data.get("contact_address_use", ""),
+                                    "line": [form_data.get("contact_address_line", "")],
+                                    "city": form_data.get("contact_city", ""),
+                                    "state": form_data.get("contact_state", ""),
+                                    "postalCode": form_data.get(
+                                        "contact_postal_code", ""
+                                    ),
+                                    "period": {
+                                        "start": form_data.get("contact_start", ""),
+                                    },
+                                }
+                            ],
+                            "gender": form_data.get("contact", ""),
+                            "organization": {
+                                "reference": form_data.get("contact_organization", ""),
+                                "display": form_data.get("contact_organization", ""),
+                            },
+                            "period": {
+                                "start": form_data.get("contact_start", ""),
+                                "end": form_data.get("contact_end", ""),
+                            },
+                        },
                     ],
-                    "name": {
-                    "family": form_data.get("contact_family_name", ""),
-                    "given": [form_data.get("contact_given_name", "")],
-                    },
-                    "telecom": [
-                    {
-                        "system": "phone",
-                        "value": form_data.get("contact_phone", ""),
-                        "use": form_data.get("contact_phone_use", ""),
-                    },
-                    {
-                        "system": "email",
-                        "value": form_data.get("contact_email", ""),
-                        "use": form_data.get("contact_email_use", ""),
-                    },
-                    ],
-                    "address": [
-                    {
-                        "use": form_data.get("contact_address_use", ""),
-                        "line": [form_data.get("contact_address_line", "")],
-                        "city": form_data.get("contact_city", ""),
-                        "state": form_data.get("contact_state", ""),
-                        "postalCode": form_data.get(
-                        "contact_postal_code", ""
-                        ),
-                    }
-                    ],
-                    "gender": form_data.get("contact", ""),
-                    "organization": {
-                    "reference": form_data.get("contact_organization", ""),
-                    "display": form_data.get("contact_organization", ""),
-                    },
-                    "period": {
-                    "start": form_data.get("contact_start", ""),
-                    "end": form_data.get("contact_end", ""),
-                    },
                 },
-                ],
-            },
             ],
             "generalPractitioner": {
-            "reference": [
-                {
-                "reference": form_data.get("general_practitioner", ""),
-                "type": "Practitioner",
-                "identifier": [
+                "reference": [
                     {
-                    "system": "http://hl7.org/fhir/sid/us-npi",
-                    "value": form_data.get("general_practitioner", ""),
-                    },
-                ],
-                "display": form_data.get("general_practitioner", ""),
-                }
-            ]
+                        "reference": form_data.get("general_practitioner", ""),
+                        "type": "Practitioner",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("general_practitioner", ""),
+                            },
+                        ],
+                        "display": form_data.get("general_practitioner", ""),
+                    }
+                ]
             },
             "managingOrganization": {
-            "reference": [
-                {
-                "reference": form_data.get("managing_organization", ""),
-                "type": "Organization",
-                "identifier": [
+                "reference": [
                     {
-                    "system": "http://hl7.org/fhir/sid/us-npi",
-                    "value": form_data.get("managing_organization", ""),
-                    },
-                ],
-                "display": form_data.get("managing_organization", ""),
-                }
-            ]
+                        "reference": form_data.get("managing_organization", ""),
+                        "type": "Organization",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("managing_organization", ""),
+                            },
+                        ],
+                        "display": form_data.get("managing_organization", ""),
+                    }
+                ]
             },
             "link": {
-            "reference": [
-                {
-                "reference": form_data.get("link", ""),
-                "type": "Patient",
-                "identifier": [
+                "reference": [
                     {
-                    "system": "http://hl7.org/fhir/sid/us-npi",
-                    "value": form_data.get("link", ""),
-                    },
+                        "reference": form_data.get("link", ""),
+                        "type": "Patient",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("link", ""),
+                            },
+                        ],
+                        "display": form_data.get("link", ""),
+                    }
                 ],
-                "display": form_data.get("link", ""),
-                }
-            ],
             },
             "photo": {
-            "reference": [
-                {
-                "reference": form_data.get("photo", ""),
-                "type": "Photo",
-                "identifier": [
+                "reference": [
                     {
-                    "system": "http://hl7.org/fhir/sid/us-npi",
-                    "value": form_data.get("photo", ""),
-                    },
+                        "reference": form_data.get("photo", ""),
+                        "type": "Photo",
+                        "identifier": [
+                            {
+                                "system": "http://hl7.org/fhir/sid/us-npi",
+                                "value": form_data.get("photo", ""),
+                            },
+                        ],
+                        "display": form_data.get("photo", ""),
+                    }
                 ],
-                "display": form_data.get("photo", ""),
-                }
-            ],
             },
         }
 
