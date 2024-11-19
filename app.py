@@ -118,8 +118,13 @@ def fhir_patient_summary(patient_id):
         "multiple_birth": extract_patient_multiple_birth(patient_json, "multipleBirth"),
         "communication": extract_patient_languages(patient_json, "language"),
         "contact": extract_patient_contact(patient_json, "contact"),
-        "general_practitioner": patient_json.get("generalPractitioner", "N/A"),
-        "managing_organization": patient_json.get("managingOrganization", "N/A"),
+        "general_practitioner": extract_general_practitioner(
+            patient_json, "generalPractitioner"
+        ),
+        "managing_organization": extract_managing_organization(
+            patient_json,
+            "managingOrganization",
+        ),
         "link": patient_json.get("link", "N/A"),
         "photo": patient_json.get("photo", "N/A"),
         "text": extract_patient_text(patient_json, "text"),
@@ -194,16 +199,64 @@ def extract_patient_contact(patient_json, contact_type):
     """Extracts contact information based on type"""
     contacts = patient_json.get("contact", [])
     if contacts:
-        relationship = contacts[0].get("relationship", "")
-        name = contacts[0].get("name", "")
-        telecom = contacts[0].get("telecom", "")
-        address = contacts[0].get("address", "")
-        gender = contacts[0].get("gender", "")
-        organization = contacts[0].get("organization", "")
-        period = contacts[0].get("period", "")
+        contact = contacts[0]
+        contact_name = contact.get("name", {})
+        contact_relationship = (
+            contact.get("relationship", [{}])[0]
+            .get("coding", [{}])[0]
+            .get("display", "N/A")
+        )
+        contact_phone = contact.get("telecom", [{}])[0].get("value", "N/A")
+        contact_email = contact.get("telecom", [{}])[1].get("value", "N/A")
+        contact_address = contact.get("address", [{}])
+        # contact_address = contact_address
+        contact_address_line = contact_address.get("contact_address_line", [""])[0]
+        contact_city = contact_address.get("contact_city", "")
+        contact_state = contact_address.get("contact_state", "")
+        contact_postal = contact_address.get("contact_postal_code", "")
+        contact_address_use = contact_address.get("contact_email_use", "")
         if contact_type == "contact":
-            return contacts[0].get("relationship", "N/A") + f" ({relationship})"
+            return (
+                f"{contact_name.get('given', [''])[0]} {contact_name.get('family', '')} {contact_name.get('_family', '')} ({contact_relationship})"
+                if contact_name
+                else "N/A"
+            )
+        if contact_type == "contact_phone":
+            return contact_phone
+        if contact_type == "contact_email":
+            return contact_email
+        if contact_type == "contact_address":
+            if contact_address_use:
+                return f"{contact_address_line}, {contact_city}, {contact_state} {contact_postal} ({contact_address_use})".strip(
+                    ", "
+                )
+            return f"{contact_address_line}, {contact_city}, {contact_state} {contact_postal}".strip(
+                ", "
+            )
+    return "N/A"
 
+
+def extract_general_practitioner(patient_json, general_practitioner_type):
+    """Extracts general practitioner information based on type"""
+    general_practitioner = patient_json.get("generalPractitioner", {})
+    if general_practitioner_type == "generalPractitioner":
+        return (
+            general_practitioner[0].get("reference", "N/A")
+            if general_practitioner
+            else "N/A"
+        )
+    return "N/A"
+
+
+def extract_managing_organization(patient_json, managing_organization_type):
+    """Extracts managing organization information based on type"""
+    managing_organization = patient_json.get("managingOrganization", {})
+    if managing_organization_type == "managingOrganization":
+        return (
+            managing_organization.get("reference", "N/A")
+            if managing_organization
+            else "N/A"
+        )
     return "N/A"
 
 
@@ -435,7 +488,7 @@ def edit_fhir_patient():
                         "display": form_data.get("photo", ""),
                     }
                 ],
-            }
+            },
         }
 
         try:
@@ -521,18 +574,10 @@ def new_fhir_patient():
                     }
                 ]
             },
-            "deceased": [
-                {
-                    "dateTime": form_data.get("deceased", ""),
-                    "deceasedBoolean": form_data.get("deceased_boolean", ""),
-                },
-            ],
-            "multipleBirth": [
-                {
-                    "multipleBirthBoolean": form_data.get("multiple_birth", ""),
-                    "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
-                },
-            ],
+            "deceasedBoolean": form_data.get("deceased_boolean", "") == "True",
+            "deceasedDateTime": form_data.get("deceased", ""),
+            "multipleBirthBoolean": form_data.get("multiple_birth", "") == "True",
+            "multipleBirthInteger": form_data.get("birth_order", ""),
             "communication": [
                 {
                     "language": {
@@ -550,142 +595,126 @@ def new_fhir_patient():
             ],
             "contact": [
                 {
-                    "reference": [
+                    "relationship": [
                         {
-                            "relationship": [
+                            "coding": [
                                 {
-                                    "coding": [
-                                        {
-                                            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                                            "code": form_data.get("relationship", ""),
-                                            "display": form_data.get(
-                                                "relationship", ""
-                                            ),
-                                        }
-                                    ]
+                                    "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                                    "code": form_data.get("relationship", ""),
+                                    "display": form_data.get("relationship", ""),
                                 }
-                            ],
-                            "name": {
-                                "family": form_data.get("contact_family_name", ""),
-                                "_family": {
-                                    "extension": [
-                                        {
-                                            "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
-                                            "valueString": form_data.get(
-                                                "contact_family_name_prefix", ""
-                                            ),
-                                        }
-                                    ]
-                                },
-                                "given": [form_data.get("contact_given_name", "")],
-                            },
-                            "telecom": [
+                            ]
+                        }
+                    ],
+                    "name": {
+                        "family": form_data.get("contact_family_name", ""),
+                        "_family": {
+                            "extension": [
                                 {
-                                    "system": "phone",
-                                    "value": form_data.get("contact_phone", ""),
-                                    "use": form_data.get("contact_phone_use", ""),
-                                },
-                                {
-                                    "system": "email",
-                                    "value": form_data.get("contact_email", ""),
-                                    "use": form_data.get("contact_email_use", ""),
-                                },
-                            ],
-                            "address": [
-                                {
-                                    "use": form_data.get("contact_address_use", ""),
-                                    "line": [form_data.get("contact_address_line", "")],
-                                    "city": form_data.get("contact_city", ""),
-                                    "state": form_data.get("contact_state", ""),
-                                    "postalCode": form_data.get(
-                                        "contact_postal_code", ""
+                                    "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
+                                    "valueString": form_data.get(
+                                        "contact_family_name_prefix", ""
                                     ),
-                                    "period": {
-                                        "start": form_data.get("contact_start", ""),
-                                    },
                                 }
-                            ],
-                            "gender": form_data.get("contact", ""),
-                            "organization": {
-                                "reference": form_data.get("contact_organization", ""),
-                                "display": form_data.get("contact_organization", ""),
-                            },
-                            "period": {
-                                "start": form_data.get("contact_start", ""),
-                                "end": form_data.get("contact_end", ""),
-                            },
+                            ]
+                        },
+                        "given": [form_data.get("contact_given_name", "")],
+                    },
+                    "telecom": [
+                        {
+                            "system": "phone",
+                            "value": form_data.get("contact_phone", ""),
+                            "use": form_data.get("contact_phone_use", ""),
+                        },
+                        {
+                            "system": "email",
+                            "value": form_data.get("contact_email", ""),
+                            "use": form_data.get("contact_email_use", ""),
                         },
                     ],
+                    "address": [
+                        {
+                            "use": form_data.get("contact_address_use", ""),
+                            "line": [form_data.get("contact_address_line", "")],
+                            "city": form_data.get("contact_city", ""),
+                            "state": form_data.get("contact_state", ""),
+                            "postalCode": form_data.get("contact_postal_code", ""),
+                            "period": {
+                                "start": form_data.get("contact_start", ""),
+                            },
+                        }
+                    ],
+                }
+            ],
+            "generalPractitioner": [
+                {
+                    "resource_type": "GeneralPractitioner",
+                    "id": form_data.get("general_practitioner_id", ""),
+                    "reference": form_data.get("general_practitioner", ""),
+                    "type": "Practitioner",
+                    "identifier": [
+                        {
+                            "system": "http://hl7.org/fhir/sid/us-npi",
+                            "value": form_data.get("general_practitioner", ""),
+                        },
+                    ],
+                    "display": form_data.get("general_practitioner_display", ""),
+                }
+            ],
+            "managingOrganization": [
+                {
+                    "resource_type": "managingOrganization",
+                    "id": form_data.get("managing_organization_id", ""),
+                    "reference": form_data.get("managing_organization", ""),
+                    "type": "Organization",
+                    "identifier": [
+                        {
+                            "system": "http://hl7.org/fhir/sid/us-npi",
+                            "value": form_data.get("managing_organization", ""),
+                        },
+                    ],
+                    "display": form_data.get("managing_organization_display", ""),
                 },
             ],
-            "generalPractitioner": {
-                "reference": [
-                    {
-                        "reference": form_data.get("general_practitioner", ""),
-                        "type": "Practitioner",
-                        "identifier": [
-                            {
-                                "system": "http://hl7.org/fhir/sid/us-npi",
-                                "value": form_data.get("general_practitioner", ""),
-                            },
-                        ],
-                        "display": form_data.get("general_practitioner", ""),
-                    }
-                ]
-            },
-            "managingOrganization": {
-                "reference": [
-                    {
-                        "reference": form_data.get("managing_organization", ""),
-                        "type": "Organization",
-                        "identifier": [
-                            {
-                                "system": "http://hl7.org/fhir/sid/us-npi",
-                                "value": form_data.get("managing_organization", ""),
-                            },
-                        ],
-                        "display": form_data.get("managing_organization", ""),
-                    }
-                ]
-            },
-            "link": {
-                "reference": [
-                    {
-                        "reference": form_data.get("link", ""),
-                        "type": "Patient",
-                        "identifier": [
-                            {
-                                "system": "http://hl7.org/fhir/sid/us-npi",
-                                "value": form_data.get("link", ""),
-                            },
-                        ],
-                        "display": form_data.get("link", ""),
-                    }
-                ],
-            },
-            "photo": {
-                "reference": [
-                    {
-                        "reference": form_data.get("photo", ""),
-                        "type": "Photo",
-                        "identifier": [
-                            {
-                                "system": "http://hl7.org/fhir/sid/us-npi",
-                                "value": form_data.get("photo", ""),
-                            },
-                        ],
-                        "display": form_data.get("photo", ""),
-                    }
-                ],
-            },
+            "link": [
+                {
+                    "resource_type": "Link",
+                    "id": form_data.get("link_id", ""),
+                    "reference": form_data.get("link", ""),
+                    "identifier": [
+                        {
+                            "system": "http://hl7.org/fhir/sid/us-npi",
+                            "value": form_data.get("link", ""),
+                        },
+                    ],
+                    "display": form_data.get("link_display", ""),
+                }
+            ],
+            "photo": [
+                {
+                    "resource_type": "Photo",
+                    "id": form_data.get("photo_id", ""),
+                    "reference": form_data.get("photo", ""),
+                    "type": "Photo",
+                    "identifier": [
+                        {
+                            "system": "http://hl7.org/fhir/sid/us-npi",
+                            "value": form_data.get("photo", ""),
+                        },
+                    ],
+                    "display": form_data.get("photo_display", ""),
+                }
+            ],
         }
 
+        print("New Patient Data:", new_patient)
         client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
         try:
             # Create a new patient on the HAPI FHIR server
             patient_resource = client.resource("Patient", **new_patient)
             patient_resource.save()
             flash("New patient record created successfully.", "alert-success")
+            # print("Form data: ", form_data)
             return redirect(url_for("fhir_patient_list"))
         except Exception as e:
             flash("Error creating new patient: " + str(e), "alert-danger")
