@@ -302,6 +302,8 @@ def edit_fhir_patient():
         form_data = request.form
         updated_patient = {
             "id": patient_id,
+            "birthDate": form_data.get("birth_date", ""),
+            "gender": form_data.get("gender", ""),
             "name": [
                 {
                     "use": form_data.get("official_name", ""),
@@ -309,8 +311,6 @@ def edit_fhir_patient():
                     "given": [form_data.get("given_name", "")],
                 }
             ],
-            "birthDate": form_data.get("birth_date", ""),
-            "gender": form_data.get("gender", ""),
             "address": [
                 {
                     "use": form_data.get("address_use", ""),
@@ -374,60 +374,56 @@ def edit_fhir_patient():
             ],
             "contact": [
                 {
-                    "reference": [
+                    "relationship": [
                         {
-                            "relationship": [
+                            "coding": [
                                 {
-                                    "coding": [
-                                        {
-                                            "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                                            "code": form_data.get("relationship", ""),
-                                            "display": form_data.get(
-                                                "relationship", ""
-                                            ),
-                                        }
-                                    ]
+                                    "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+                                    "code": form_data.get("relationship", ""),
+                                    "display": form_data.get("relationship", ""),
                                 }
-                            ],
-                            "name": {
-                                "family": form_data.get("contact_family_name", ""),
-                                "given": [form_data.get("contact_given_name", "")],
-                            },
-                            "telecom": [
+                            ]
+                        }
+                    ],
+                    "name": {
+                        "family": form_data.get("contact_family_name", ""),
+                        "_family": {
+                            "extension": [
                                 {
-                                    "system": "phone",
-                                    "value": form_data.get("contact_phone", ""),
-                                    "use": form_data.get("contact_phone_use", ""),
-                                },
-                                {
-                                    "system": "email",
-                                    "value": form_data.get("contact_email", ""),
-                                    "use": form_data.get("contact_email_use", ""),
-                                },
-                            ],
-                            "address": [
-                                {
-                                    "use": form_data.get("contact_address_use", ""),
-                                    "line": [form_data.get("contact_address_line", "")],
-                                    "city": form_data.get("contact_city", ""),
-                                    "state": form_data.get("contact_state", ""),
-                                    "postalCode": form_data.get(
-                                        "contact_postal_code", ""
+                                    "url": "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix",
+                                    "valueString": form_data.get(
+                                        "contact_family_name_prefix", ""
                                     ),
                                 }
-                            ],
-                            "gender": form_data.get("contact", ""),
-                            "organization": {
-                                "reference": form_data.get("contact_organization", ""),
-                                "display": form_data.get("contact_organization", ""),
-                            },
-                            "period": {
-                                "start": form_data.get("contact_start", ""),
-                                "end": form_data.get("contact_end", ""),
-                            },
+                            ]
+                        },
+                        "given": [form_data.get("contact_given_name", "")],
+                    },
+                    "telecom": [
+                        {
+                            "system": "phone",
+                            "value": form_data.get("contact_phone", ""),
+                            "use": form_data.get("contact_phone_use", ""),
+                        },
+                        {
+                            "system": "email",
+                            "value": form_data.get("contact_email", ""),
+                            "use": form_data.get("contact_email_use", ""),
                         },
                     ],
-                },
+                    "address": [
+                        {
+                            "use": form_data.get("contact_address_use", ""),
+                            "line": [form_data.get("contact_address_line", "")],
+                            "city": form_data.get("contact_city", ""),
+                            "state": form_data.get("contact_state", ""),
+                            "postalCode": form_data.get("contact_postal_code", ""),
+                            "period": {
+                                "start": form_data.get("contact_start", ""),
+                            },
+                        }
+                    ],
+                }
             ],
             "generalPractitioner": {
                 "reference": [
