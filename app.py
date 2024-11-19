@@ -47,18 +47,22 @@ def fhir_patient_list():
     """Get a list of patients from the HAPI server and display them to the user"""
 
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
-    patients = client.resources("Patient").sort("-_lastUpdated").limit(100).fetch()
+    try:
+        patients = client.resources("Patient").sort("-_lastUpdated").limit(100).fetch()
 
-    patient_list = []
-    for patient in patients:
-        patient_list.append(
-            {
-                "id": patient.id,
-            }
-        )
-        # print(patient_list)
+        patient_list = []
+        for patient in patients:
+            patient_list.append(
+                {
+                    "id": patient.id,
+                }
+            )
+            # print(patient_list)
 
-    return render_template("fhir_patient_list.html", patients=patient_list)
+        return render_template("fhir_patient_list.html", patients=patient_list)
+    except Exception as e:
+        flash("Error fetching patient list: " + str(e), "alert-danger")
+        return redirect(url_for("index"))
 
 
 #
