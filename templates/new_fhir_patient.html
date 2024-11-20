@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="address_line">Address</label>
-                                <textarea type="text" class="form-control" id="address_line" rows="3"
+                                <textarea class="form-control" id="address_line" rows="3"
                                     name="address_line" required></textarea>
                             </div>
                         </div>
@@ -150,8 +150,8 @@
                                 <option value="M">Married</option>
                                 <option value="S">Single</option>
                                 <option value="D">Divorced</option>
-                                <option value="W">Widowed</option> 
-                                <option value="L">Legally Separated</option> 
+                                <option value="W">Widowed</option>
+                                <option value="L">Legally Separated</option>
                                 <option value="U">Unknown</option>
                             </select>
                         </div>
@@ -171,8 +171,14 @@
                     </div>
                     <div class="col-md" id="birth_order_group" style="display: none;">
                         <div class="form-group">
-                            <label for="birth_order">Birth Order</label>
-                            <input type="number" class="form-control" id="birth_order" name="birth_order">
+                            <label for="multiple_birth_integer">Birth Order</label>
+                            <select class="form-control" id="multiple_birth_integer" name="multiple_birth_integer">
+                                <option value="" disabled selected>Select</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -199,8 +205,8 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group" id="date_of_death_group">
+                    <div class="col-md" id="date_of_death_group" style="display: none;">
+                        <div class="form-group">
                             <label for="deceased">Deceased Date:</label>
                             <input type="date" class="form-control" id="deceased" name="deceased">
                         </div>
@@ -211,23 +217,11 @@
                 <script>
                     function toggleDateOfDeath(select) {
                         var dateOfDeathGroup = document.getElementById('date_of_death_group');
-                        if (select.value === 'yes') {
+                        if (select.value === 'True') {
                             dateOfDeathGroup.style.display = 'block';
                         } else {
                             dateOfDeathGroup.style.display = 'none';
                         }
-                    }
-
-                    function validateForm() {
-                        var resourceType = document.getElementById('resource_type').value;
-                        var id = document.getElementById('id').value;
-                        var reference = document.getElementById('reference').value;
-
-                        if (!resourceType || (!id && !reference)) {
-                            alert('Arguments `resource_type` and `id` or `reference` are required');
-                            return false;
-                        }
-                        return true;
                     }
                 </script>
 
@@ -235,7 +229,7 @@
                     <div class="col-md">
                         <div class="form-group">
                             <label for="general_practitioner_refrence">General Practitioner Reference</label>
-                            <input type="text" class="form-control" id="general_practitioner"
+                            <input type="text" class="form-control" id="general_practitioner_reference"
                                 name="general_practitioner_reference">
                         </div>
                     </div>
@@ -250,9 +244,9 @@
                     <div class="row g-2">
                         <div class="col-md">
                             <div class="form-group">
-                                <label for="managing_organization">Managing Organization</label>
-                                <input type="text" class="form-control" id="managing_organization"
-                                    name="managing_organization">
+                                <label for="managing_organization_reference">Managing Organization Reference</label>
+                                <input type="text" class="form-control" id="managing_organization_reference"
+                                    name="managing_organization_reference">
                             </div>
                         </div>
                         <div class="col-md">
@@ -266,21 +260,12 @@
                         <div class="row g-2">
                             <div class="col-md">
                                 <div class="form-group">
-                                    <label for="link_other_refrence">Link Reference</label>
-                                    <input type="text" class="form-control" id="link_other_refrence"
-                                        name="link_other_reference">
+                                    <label for="link_display">Link Reference</label>
+                                    <input type="text" class="form-control" id="link_display" name="link_link">
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-2">
-                            <div class="col-md">
-                                <div class="form-group">
-                                    <label for="link_other_display">Link Display</label>
-                                    <input type="text" class="form-control" id="link_other_display"
-                                        name="link_other_display">
-                                </div>
-                            </div>
-                        </div>
+
 
                         <div class="row g-2">
                             <div class="col-md">
@@ -295,105 +280,130 @@
                             <label for="languages">Languages Spoken</label>
                             <div class="col-md">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_french" name="languages" value="french">
+                                    <input class="form-check-input" type="checkbox" id="language_french"
+                                        name="languages" value="french">
                                     <label class="form-check-label" for="language_french">French</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_italian" name="languages" value="italian">
+                                    <input class="form-check-input" type="checkbox" id="language_italian"
+                                        name="languages" value="italian">
                                     <label class="form-check-label" for="language_italian">Italian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_spanish" name="languages" value="spanish">
+                                    <input class="form-check-input" type="checkbox" id="language_spanish"
+                                        name="languages" value="spanish">
                                     <label class="form-check-label" for="language_spanish">Spanish</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_portuguese" name="languages" value="portuguese">
+                                    <input class="form-check-input" type="checkbox" id="language_portuguese"
+                                        name="languages" value="portuguese">
                                     <label class="form-check-label" for="language_portuguese">Portuguese</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_romanian" name="languages" value="romanian">
+                                    <input class="form-check-input" type="checkbox" id="language_romanian"
+                                        name="languages" value="romanian">
                                     <label class="form-check-label" for="language_romanian">Romanian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_german" name="languages" value="german">
+                                    <input class="form-check-input" type="checkbox" id="language_german"
+                                        name="languages" value="german">
                                     <label class="form-check-label" for="language_german">German</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_english" name="languages" value="english">
+                                    <input class="form-check-input" type="checkbox" id="language_english"
+                                        name="languages" value="english">
                                     <label class="form-check-label" for="language_english">English</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_dutch" name="languages" value="dutch">
+                                    <input class="form-check-input" type="checkbox" id="language_dutch" name="languages"
+                                        value="dutch">
                                     <label class="form-check-label" for="language_dutch">Dutch</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_swedish" name="languages" value="swedish">
+                                    <input class="form-check-input" type="checkbox" id="language_swedish"
+                                        name="languages" value="swedish">
                                     <label class="form-check-label" for="language_swedish">Swedish</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_danish" name="languages" value="danish">
+                                    <input class="form-check-input" type="checkbox" id="language_danish"
+                                        name="languages" value="danish">
                                     <label class="form-check-label" for="language_danish">Danish</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_norwegian" name="languages" value="norwegian">
+                                    <input class="form-check-input" type="checkbox" id="language_norwegian"
+                                        name="languages" value="norwegian">
                                     <label class="form-check-label" for="language_norwegian">Norwegian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_russian" name="languages" value="russian">
+                                    <input class="form-check-input" type="checkbox" id="language_russian"
+                                        name="languages" value="russian">
                                     <label class="form-check-label" for="language_russian">Russian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_polish" name="languages" value="polish">
+                                    <input class="form-check-input" type="checkbox" id="language_polish"
+                                        name="languages" value="polish">
                                     <label class="form-check-label" for="language_polish">Polish</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_czech" name="languages" value="czech">
+                                    <input class="form-check-input" type="checkbox" id="language_czech" name="languages"
+                                        value="czech">
                                     <label class="form-check-label" for="language_czech">Czech</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_slovak" name="languages" value="slovak">
+                                    <input class="form-check-input" type="checkbox" id="language_slovak"
+                                        name="languages" value="slovak">
                                     <label class="form-check-label" for="language_slovak">Slovak</label>
                                 </div>
                             </div>
                             <div class="col-md">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_bulgarian" name="languages" value="bulgarian">
+                                    <input class="form-check-input" type="checkbox" id="language_bulgarian"
+                                        name="languages" value="bulgarian">
                                     <label class="form-check-label" for="language_bulgarian">Bulgarian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_serbian" name="languages" value="serbian">
+                                    <input class="form-check-input" type="checkbox" id="language_serbian"
+                                        name="languages" value="serbian">
                                     <label class="form-check-label" for="language_serbian">Serbian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_croatian" name="languages" value="croatian">
+                                    <input class="form-check-input" type="checkbox" id="language_croatian"
+                                        name="languages" value="croatian">
                                     <label class="form-check-label" for="language_croatian">Croatian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_slovenian" name="languages" value="slovenian">
+                                    <input class="form-check-input" type="checkbox" id="language_slovenian"
+                                        name="languages" value="slovenian">
                                     <label class="form-check-label" for="language_slovenian">Slovenian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_latvian" name="languages" value="latvian">
+                                    <input class="form-check-input" type="checkbox" id="language_latvian"
+                                        name="languages" value="latvian">
                                     <label class="form-check-label" for="language_latvian">Latvian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_lithuanian" name="languages" value="lithuanian">
+                                    <input class="form-check-input" type="checkbox" id="language_lithuanian"
+                                        name="languages" value="lithuanian">
                                     <label class="form-check-label" for="language_lithuanian">Lithuanian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_greek" name="languages" value="greek">
+                                    <input class="form-check-input" type="checkbox" id="language_greek" name="languages"
+                                        value="greek">
                                     <label class="form-check-label" for="language_greek">Greek</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_finnish" name="languages" value="finnish">
+                                    <input class="form-check-input" type="checkbox" id="language_finnish"
+                                        name="languages" value="finnish">
                                     <label class="form-check-label" for="language_finnish">Finnish</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_hungarian" name="languages" value="hungarian">
+                                    <input class="form-check-input" type="checkbox" id="language_hungarian"
+                                        name="languages" value="hungarian">
                                     <label class="form-check-label" for="language_hungarian">Hungarian</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="language_estonian" name="languages" value="estonian">
+                                    <input class="form-check-input" type="checkbox" id="language_estonian"
+                                        name="languages" value="estonian">
                                     <label class="form-check-label" for="language_estonian">Estonian</label>
                                 </div>
                             </div>
@@ -439,21 +449,30 @@
                                 <h3>Contact Information</h3>
                                 <div class="form-group">
                                     <label for="contact_relationship">Relationship</label>
-                                    <select type="text" class="form-control" id="contact_relationship"
-                                        name="contact_relationship" value="relationship" required>
+                                    <select class="form-control" id="contact_relationship" name="contact_relationship"
+                                        required>
                                         <option value="" disabled selected>Select</option>
-                                        <option value="BP">Billing contact person</option>
-                                        <option value="CP">Contact person</option>
-                                        <option value="EP">Emergency contact person</option>
-                                        <option value="PR">Person preparing referral</option>
-                                        <option value="E">Employer</option>
-                                        <option value="C">Emergency Contact</option>
-                                        <option value="F">Federal Agency</option>
-                                        <option value="I">Insurance Company</option>
-                                        <option value="N">Next-of-Kin</option>
-                                        <option value="S">State Agency</option>
-                                        <option value="U">Unknown</option>
+                                        <option value="Billing contact person">Billing contact person</option>
+                                        <option value="Contact person">Contact person</option>
+                                        <option value="Emergency contact person">Emergency contact person</option>
+                                        <option value="Person preparing referral">Person preparing referral</option>
+                                        <option value="Employer">Employer</option>
+                                        <option value="Emergency Contact">Emergency Contact</option>
+                                        <option value="Federal Agency">Federal Agency</option>
+                                        <option value="Insurance Company">Insurance Company</option>
+                                        <option value="Next-of-Kin">Next-of-Kin</option>
+                                        <option value="State Agency">State Agency</option>
+                                        <option value="Unknown">Unknown</option>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label for="contact_id"></label>
+                                    <input type="hidden" class="form-control" id="contact_id" name="contact_id">
                                 </div>
                             </div>
                         </div>
@@ -473,6 +492,13 @@
                                     <label for="contact_family_name">Last Name</label>
                                     <input type="text" class="form-control" id="contact_family_name"
                                         name="contact_family_name" required>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label for="contact_family_name_prefix">Prefix</label>
+                                    <input type="text" class="form-control" id="contact_family_name_prefix"
+                                        name="contact_family_name_prefix">
                                 </div>
                             </div>
                         </div>
@@ -558,29 +584,44 @@
                         <div class="row g-2">
                             <div class="col-md">
                                 <div class="form-group">
-                                    <label for="active">Active</label>
-                                    <select class="form-control" id="active" name="active" required>
-                                        <option value="" disabled selected>Select</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                    </select>
+                                    <label for="contact_start">Contact Start Date</label>
+                                    <input type="date" class="form-control" id="contact_start" name="contact_start"
+                                        required>
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="row g-2">
-                    <div class="col-md">
-                        <label for="text">Text</label>
-                        <textarea type="text" class="form-control" id="text" rows="3" name="text" required></textarea>
-                    </div>
-                </div> -->
-                    </div>
+                        <div class="row g-2">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label for="contact_gender">Contact Gender</label>
+                                    <select class="form-control" id="gender" name="contact_gender" required>
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
 
-                    <br>
-                    <div class="button-inline">
-                        <button class="button" type="submit">Save</button>
-                        <button class="button" type="button"
-                            onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Cancel</button>
-                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="active">Active</label>
+                                            <select class="form-control" id="active" name="active" required>
+                                                <option value="" disabled selected>Select</option>
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+                            <div class="button-inline">
+                                <button class="button" type="submit">Save</button>
+                                <button class="button" type="button"
+                                    onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Cancel</button>
+                            </div>
 
 
             </form>
