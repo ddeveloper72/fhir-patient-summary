@@ -448,7 +448,63 @@
                     <div class="row g-2">
                         <div class="col-md">
                             <div class="form-group">
-                                <input type="checkbox" class="form-check> form-control" name="active" id="active"
+                                <label for="contact_address_line">Contact Address Line</label>
+                                <textarea type="text" class="form-control" rows="3" name="contact_address_line"
+                                    id="contact_address_line"
+                                    value="{{ patient.contact[0].address.line[0] if patient.contact else '' }}">{{ patient.contact[0].address.line[0] if patient.contact else '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="contact_city">Contact City</label>
+                                <input type="text" class="form-control" name="contact_city" id="contact_city"
+                                    value="{{ patient.contact[0].address.city if patient.contact else '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="contact_state">Contact State</label>
+                                <input type="text" class="form-control" name="contact_state" id="contact_state"
+                                    value="{{ patient.contact[0].address.state if patient.contact else '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group
+                                <label for=" contact_postal_code">Contact Postal Code</label>
+                                <input type="text" class="form-control" name="contact_postal_code"
+                                    id="contact_postal_code"
+                                    value="{{ patient.contact[0].address.postalCode if patient.contact else '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group
+                                <label for=" contact_address_use">Contact Address Type</label>
+                                <select name="contact_address_use" class="form-control" id="contact_address_use"
+                                    required>
+                                    {% if patient.contact and patient.contact[0].address.use == 'home' %}
+                                    <option value="home" selected>Home</option>
+                                    {% else %}
+                                    <option value="work" selected>Work</option>
+                                    {% endif %}
+                                    <option value="home">Home</option>
+                                    <option value="work">Work</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <input type="checkbox" class="form-check-input form-control" name="active" id="active"
                                     value="{{ patient.active }}" {% if patient.active %} checked {% endif %}>
                                 <label for="active">Active</label>
                             </div>
