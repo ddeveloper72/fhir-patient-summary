@@ -400,7 +400,7 @@
 
                 <div class="row g-2">
                     <div class="col-md">
-                        <div class="form-group
+                        <div class="form-group">
                             <label for=" contact_phone">Contact Phone</label>
                             <input type="text" class="form-control" name="contact_phone" id="contact_phone"
                                 value="{{ patient.contact[0].telecom[0].value if patient.contact else '' }}">
@@ -421,24 +421,29 @@
                         </div>
                     </div>
 
-
-
-
                     <div class="row g-2">
                         <div class="col-md">
                             <div class="form-group">
-                                <label for="contact_phone">Contact Phone</label>
-                                <input type="text" class="form-control" name="contact_phone" id="contact_phone"
-                                    value="{{ patient.contact[0].telecom[0].value if patient.contact else '' }}">
+                                <label for="contact_email">Contact Email</label>
+                                <input type="text" class="form-control" name="contact_email" id="contact_email"
+                                    value="{{ patient.contact[0].telecom[1].value if patient.contact else '' }}">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="contact_email_use">Email Type</label>
+                                <select class="form-control" id="contact_email_use" name="contact_email_use" required>
+                                    {% if patient.contact and patient.contact[0].telecom[1].use == 'home' %}
+                                    <option value="home" selected>Home</option>
+                                    {% else %}
+                                    <option value="work" selected>Work</option>
+                                    {% endif %}
+                                    <option value="home">Home</option>
+                                    <option value="work">Work</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
 
                     <div class="row g-2">
                         <div class="col-md">
