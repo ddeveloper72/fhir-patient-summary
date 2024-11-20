@@ -65,38 +65,6 @@ def fhir_patient_list():
         return redirect(url_for("index"))
 
 
-# Search for a patient by first name, or lst name or both
-# @app.route("/hl7/patient_summary/fhir/search", methods=["GET", "POST"])
-# def fhir_patient_search():
-#     """Search for a patient by name and display the results"""
-
-#     if request.method == "POST":
-#         search_query = request.form.get("search_query")
-#         return redirect(url_for("fhir_patient_search", search_query=search_query))
-#     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
-#     try:
-#         patients = client.resources("Patient").search(name=search_query).limit(100).fetch()
-
-#         if not patients:
-#             flash("No patients found with the given name.", "alert-warning")
-#             return redirect(url_for("fhir_patient_list"))
-
-#         patient_list_detailed = []
-#         for patient in patients:
-#             name = extract_patient_name(patient.serialize())
-#             patient_list_detailed.append(
-#                 {
-#                     "id": patient.id,
-#                     "name": name,
-#                 }
-#             )
-
-#         return render_template("fhir_patient_list.html", patients=patient_list_detailed)
-#     except Exception as e:
-#         flash("Error searching for patients: " + str(e), "alert-danger")
-#         return redirect(url_for("index"))
-
-
 @app.route(
     "/hl7/patient_summary/fhir/patient",
     defaults={"patient_id": None},
@@ -669,8 +637,12 @@ def new_fhir_patient():
                             "coding": [
                                 {
                                     "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                                    "code": get_relationship_code(form_data.get("contact_relationship", "")),
-                                    "display": form_data.get("contact_relationship", ""),
+                                    "code": get_relationship_code(
+                                        form_data.get("contact_relationship", "")
+                                    ),
+                                    "display": form_data.get(
+                                        "contact_relationship", ""
+                                    ),
                                 }
                             ]
                         }
