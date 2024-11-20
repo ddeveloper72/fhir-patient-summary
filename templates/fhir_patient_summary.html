@@ -23,10 +23,14 @@
                 </ul>
 
                 <ul>
-                    <li><strong>Marital Status:</strong> {{ patient.marital_status}}</li>
-                    <li><strong>Multiple Birth:</strong> {{ patient.multiple_birth}}</li>
+                    <li><strong>Marital Status:</strong> {{ patient.marital_status }}</li>
+                    <li><strong>Multiple Birth:</strong> {{ patient.multiple_birth }}</li>
+                    <!-- {% if patient.multiple_birth == 'True' %} -->
+                    <li><strong>Birth Order:</strong> {{ patient.multiple_birth_integer }}</li>
+                    <!-- {% endif %} -->
                     {% if patient.deceased != 'N/A' %}
-                    <li><strong>Deceased:</strong> {{ patient.deceased }}</li>
+                    <li><strong>Date Deceased:</strong> {{ patient.deceased }}</li>
+
                     {% endif %}
                     <li><strong>Communication:</strong> {{ patient.communication }}</li>
                     <li><strong>Contact</strong> {{ patient.contact }}</li>
