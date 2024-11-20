@@ -65,7 +65,36 @@ def fhir_patient_list():
         return redirect(url_for("index"))
 
 
-#
+# Search for a patient by first name, or lst name or both
+# @app.route("/hl7/patient_summary/fhir/search", methods=["GET", "POST"])
+# def fhir_patient_search():
+#     """Search for a patient by name and display the results"""
+
+#     if request.method == "POST":
+#         search_query = request.form.get("search_query")
+#         return redirect(url_for("fhir_patient_search", search_query=search_query))
+#     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+#     try:
+#         patients = client.resources("Patient").search(name=search_query).limit(100).fetch()
+
+#         if not patients:
+#             flash("No patients found with the given name.", "alert-warning")
+#             return redirect(url_for("fhir_patient_list"))
+
+#         patient_list_detailed = []
+#         for patient in patients:
+#             name = extract_patient_name(patient.serialize())
+#             patient_list_detailed.append(
+#                 {
+#                     "id": patient.id,
+#                     "name": name,
+#                 }
+#             )
+
+#         return render_template("fhir_patient_list.html", patients=patient_list_detailed)
+#     except Exception as e:
+#         flash("Error searching for patients: " + str(e), "alert-danger")
+#         return redirect(url_for("index"))
 
 
 @app.route(
@@ -122,6 +151,14 @@ def fhir_patient_summary(patient_id):
         "multiple_birth": extract_patient_multiple_birth(patient_json, "multipleBirth"),
         "communication": extract_patient_languages(patient_json, "language"),
         "contact": extract_patient_contact(patient_json, "contact"),
+        "contact_relationship": extract_patient_contact_relationship(
+            patient_json, "relationship"
+        ),
+        "contact_address": extract_patient_contact_address(
+            patient_json, "contact_address"
+        ),
+        "contact_phone": extract_patient_contact_phone(patient_json, "contact_phone"),
+        "contact_email": extract_patient_contact_email(patient_json, "contact_email"),
         "general_practitioner": extract_general_practitioner(
             patient_json, "generalPractitioner"
         ),
@@ -201,42 +238,74 @@ def extract_patient_marital_status(patient_json, marital_status_type):
 
 def extract_patient_contact(patient_json, contact_type):
     """Extracts contact information based on type"""
-    contacts = patient_json.get("contact", [])
-    if contacts:
-        contact = contacts[0]
-        contact_name = contact.get("name", {})
+    contact = patient_json.get("contact", [])
+    if contact:
+        contact_name = contact[0].get("name", {})
+        family_name = contact_name.get("family", "")
+        given_name = contact_name.get("given", [""])[0]
+        prefix_extension = contact_name.get("_family", {}).get("extension", [])
+        value_string = next(
+            (
+                ext.get("valueString", "")
+                for ext in prefix_extension
+                if ext.get("url")
+                == "http://hl7.org/fhir/StructureDefinition/humanname-own-prefix"
+            ),
+            "",
+        )
+        return f"{value_string} {given_name} {family_name}".strip()
+    return "N/A"
+
+
+def extract_patient_contact_relationship(patient_json, contact_relationship_type):
+    """Extracts contact relationship information based on type"""
+    contact = patient_json.get("contact", [])
+    if contact:
         contact_relationship = (
-            contact.get("relationship", [{}])[0]
+            contact[0]
+            .get("relationship", [{}])[0]
             .get("coding", [{}])[0]
             .get("display", "N/A")
         )
-        contact_phone = contact.get("telecom", [{}])[0].get("value", "N/A")
-        contact_email = contact.get("telecom", [{}])[1].get("value", "N/A")
-        contact_address = contact.get("address", [{}])
-        # contact_address = contact_address
-        contact_address_line = contact_address.get("contact_address_line", [""])[0]
-        contact_city = contact_address.get("contact_city", "")
-        contact_state = contact_address.get("contact_state", "")
-        contact_postal = contact_address.get("contact_postal_code", "")
-        contact_address_use = contact_address.get("contact_email_use", "")
-        if contact_type == "contact":
-            return (
-                f"{contact_name.get('given', [''])[0]} {contact_name.get('family', '')} {contact_name.get('_family', '')} ({contact_relationship})"
-                if contact_name
-                else "N/A"
-            )
-        if contact_type == "contact_phone":
-            return contact_phone
-        if contact_type == "contact_email":
-            return contact_email
-        if contact_type == "contact_address":
-            if contact_address_use:
-                return f"{contact_address_line}, {contact_city}, {contact_state} {contact_postal} ({contact_address_use})".strip(
-                    ", "
-                )
-            return f"{contact_address_line}, {contact_city}, {contact_state} {contact_postal}".strip(
-                ", "
-            )
+        return contact_relationship
+    return "N/A"
+
+
+def extract_patient_contact_address(patient_json, contact_address_type):
+    """Extracts contact address information based on type"""
+    contact = patient_json.get("contact", [])
+    if contact:
+        contact_address = contact[0].get("address", {})
+        contact_address_use = contact_address.get("use", "")
+        contact_address_line = contact_address.get("line", [""])[0]
+        contact_city = contact_address.get("city", "")
+        contact_state = contact_address.get("state", "")
+        contact_postal_code = contact_address.get("postalCode", "")
+        return f"{contact_address_line}, {contact_city}, {contact_state} {contact_postal_code} ({contact_address_use})".strip(
+            ", "
+        )
+    return "N/A"
+
+
+def extract_patient_contact_phone(patient_json, contact_phone_type):
+    """Extracts contact phone information based on type"""
+    contact = patient_json.get("contact", [])
+    if contact:
+        contact_phone = contact[0].get("telecom", [])
+        contact_phone_use = contact_phone[0].get("use", "")
+        contact_phone_value = contact_phone[0].get("value", "")
+        return f"{contact_phone_value} ({contact_phone_use})"
+    return "N/A"
+
+
+def extract_patient_contact_email(patient_json, contact_email_type):
+    """Extracts contact email information based on type"""
+    contact = patient_json.get("contact", [])
+    if contact:
+        contact_email = contact[0].get("telecom", [])
+        contact_email_use = contact_email[1].get("use", "")
+        contact_email_value = contact_email[1].get("value", "")
+        return f"{contact_email_value} ({contact_email_use})"
     return "N/A"
 
 
@@ -600,8 +669,8 @@ def new_fhir_patient():
                             "coding": [
                                 {
                                     "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                                    "code": form_data.get("relationship", ""),
-                                    "display": form_data.get("relationship", ""),
+                                    "code": get_relationship_code(form_data.get("contact_relationship", "")),
+                                    "display": form_data.get("contact_relationship", ""),
                                 }
                             ]
                         }
@@ -753,6 +822,24 @@ def get_language_code(language_display):
         "estonian": "et",
     }
     return language_map.get(language_display.lower(), "en")
+
+
+def get_relationship_code(contact_relationship):
+    """Returns the relationship code for a given relationship display name"""
+    relationship_map = {
+        "Billing contact person": "BP",
+        "Contact person": "CP",
+        "Emergency contact person": "EP",
+        "Person preparing referral": "PR",
+        "Employer": "E",
+        "Emergency Contact": "C",
+        "Federal Agency": "F",
+        "Insurance Company": "I",
+        "Next-of-Kin": "N",
+        "State Agency": "S",
+        "Unknown": "U",
+    }
+    return relationship_map.get(contact_relationship, "U")
 
 
 # Delete patient record
