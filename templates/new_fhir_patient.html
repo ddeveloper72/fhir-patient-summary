@@ -59,8 +59,8 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="address_line">Address</label>
-                                <textarea class="form-control" id="address_line" rows="3"
-                                    name="address_line" required></textarea>
+                                <textarea class="form-control" id="address_line" rows="3" name="address_line"
+                                    required></textarea>
                             </div>
                         </div>
                     </div>
@@ -602,26 +602,27 @@
                                     </select>
 
                                 </div>
-                                <div class="row g-2">
-                                    <div class="col-md">
-                                        <div class="form-group">
-                                            <label for="active">Active</label>
-                                            <select class="form-control" id="active" name="active" required>
-                                                <option value="" disabled selected>Select</option>
-                                                <option value="True">Yes</option>
-                                                <option value="False">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label for="active">Active</label>
+                                    <select class="form-control" id="active" name="active" required>
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
                                 </div>
                             </div>
+                        </div>
 
-                            <br>
-                            <div class="button-inline">
-                                <button class="button" type="submit">Save</button>
-                                <button class="button" type="button"
-                                    onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Cancel</button>
-                            </div>
+                        <br>
+                        <div class="button-inline">
+                            <button class="button" type="submit">Save</button>
+                            <button class="button" type="button"
+                                onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Cancel</button>
+                        </div>
 
 
             </form>
