@@ -384,7 +384,7 @@
                         <div class="form-group">
                             <label for="contact_given_name">First Name</label>
                             <input type="text" class="form-control" name="contact_given_name" id="contact_given_name"
-                                value="{{ patient.contact[0].name.text if patient.contact else '' }}">
+                                value="{{ patient.contact[0].name.given[0] if patient.contact else '' }}">
                         </div>
                     </div>
                 </div>
@@ -393,7 +393,7 @@
                         <div class="form-group">
                             <label for="contact_family_name">Last Name</label>
                             <input type="text" class="form-control" name="contact_family_name" id="contact_family_name"
-                                value="{{ patient.contact[0].name.text if patient.contact else '' }}">
+                                value="{{ patient.contact[0].name.family if patient.contact else '' }}">
                         </div>
                     </div>
                 </div>
