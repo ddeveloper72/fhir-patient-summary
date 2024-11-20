@@ -116,7 +116,8 @@ def fhir_patient_summary(patient_id):
         "marital_status": extract_patient_marital_status(patient_json, "maritalStatus"),
         "deceased": patient_json.get("deceasedDateTime", "N/A"),
         "deceased_age": patient_json.get("deceasedAge", "N/A"),
-        "multiple_birth": extract_patient_multiple_birth(patient_json, "multipleBirth"),
+        "multiple_birth": patient_json.get("multipleBirthBoolean", "N/A"),
+        "multiple_birth_integer": patient_json.get("multipleBirthInteger", "N/A"),
         "communication": extract_patient_languages(patient_json, "language"),
         "contact": extract_patient_contact(patient_json, "contact"),
         "contact_relationship": extract_patient_contact_relationship(
@@ -301,14 +302,6 @@ def extract_managing_organization(patient_json, managing_organization_type):
     return "N/A"
 
 
-def extract_patient_multiple_birth(patient_json, multiple_birth_type):
-    """Extracts multiple birth information based on type"""
-    multiple_birth = patient_json.get("multipleBirth", {})
-    if multiple_birth_type == "multipleBirth":
-        return multiple_birth.get("multipleBirthBoolean", "N/A")
-    return "N/A"
-
-
 def extract_patient_languages(patient_json, language_type):
     """Extracts language information based on type"""
     languages = patient_json.get("communication", [])
@@ -388,16 +381,12 @@ def edit_fhir_patient():
             },
             "deceased": [
                 {
-                    "dateTime": form_data.get("deceased", ""),
+                    "deceasedDateTime": form_data.get("deceased", ""),
                     "deceasedBoolean": form_data.get("deceased_boolean", ""),
                 },
             ],
-            "multipleBirth": [
-                {
-                    "multipleBirthBoolean": form_data.get("multiple_birth", ""),
-                    "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
-                },
-            ],
+            "multipleBirthBoolean": form_data.get("multiple_birth", ""),
+            "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
             "communication": [
                 {
                     "language": {
@@ -611,10 +600,10 @@ def new_fhir_patient():
                     }
                 ]
             },
-            "deceasedBoolean": form_data.get("deceased_boolean", "") == "True",
             "deceasedDateTime": form_data.get("deceased", ""),
+            "deceasedBoolean": form_data.get("deceased_boolean", "") == "True",
             "multipleBirthBoolean": form_data.get("multiple_birth", "") == "True",
-            "multipleBirthInteger": form_data.get("birth_order", ""),
+            "multipleBirthInteger": form_data.get("multiple_birth_integer", ""),
             "communication": [
                 {
                     "language": {
