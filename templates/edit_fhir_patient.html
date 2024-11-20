@@ -510,9 +510,12 @@
                 <div class="row g-2">
                     <div class="col-md">
                         <div class="form-group">
-                            <input type="checkbox" class="form-check-input form-control" name="active" id="active"
-                                value="{{ patient.active }}" {% if patient.active %} checked {% endif %}>
                             <label for="active">Active</label>
+                            <select class="form-control" id="active" name="active" 
+                            value="{{ patient.active }}">
+                                <option value="True">Yes</option>
+                                <option value="False">No</option>
+                            </select>
                         </div>
                     </div>
                 </div>
