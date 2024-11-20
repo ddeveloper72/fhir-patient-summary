@@ -409,7 +409,9 @@ def edit_fhir_patient():
                             "coding": [
                                 {
                                     "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
-                                    "code": form_data.get("contact_relationship", ""),
+                                    "code": get_relationship_code(
+                                        form_data.get("contact_relationship", "")
+                                    ),
                                     "display": form_data.get(
                                         "contact_relationship", ""
                                     ),
