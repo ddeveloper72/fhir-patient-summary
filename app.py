@@ -369,7 +369,7 @@ def edit_fhir_patient():
             "profile": [
                 "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
             ],
-            "active": True,
+            "active": form_data.get("active", "") == "True",
             "maritalStatus": {
                 "coding": [
                     {
@@ -590,7 +590,7 @@ def new_fhir_patient():
             "profile": [
                 "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
             ],
-            "active": True,
+            "active": form_data.get("active", "") == "True",
             "maritalStatus": {
                 "coding": [
                     {
