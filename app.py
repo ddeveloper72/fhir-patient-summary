@@ -65,6 +65,37 @@ def fhir_patient_list():
         return redirect(url_for("index"))
 
 
+@app.route("/hl7/patient_summary/fhir/patient/search", methods=["GET", "POST"])
+def fhir_patient_search():
+    """Search for a patient record in the HAPI FHIR server"""
+    if request.method == "POST":
+        form_data = request.form
+        resource_type = form_data.get("resource_type")
+        search_detail = {
+            "given": form_data.get("given"),
+            "family": form_data.get("family"),
+
+        }
+
+        # Remove empty values from the search detail
+        specific_detail = {k: v for k, v in search_detail.items() if v}
+        
+
+        client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+        try:
+            patients = client.resources(resource_type).search(**specific_detail).fetch()
+            
+            bundle_json = [patient.serialize() for patient in patients]
+
+            return render_template("fhir_patient_bundles.html", bundle_json=bundle_json)
+
+        except Exception as e:
+            flash("Error fetching patient list: " + str(e), "alert-danger")
+            return redirect(url_for("fhir_patient_list"))
+
+    return render_template("fhir_patient_search.html")
+
+
 @app.route(
     "/hl7/patient_summary/fhir/patient",
     defaults={"patient_id": None},
@@ -81,7 +112,7 @@ def fhir_patient_summary(patient_id):
     client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
 
     try:
-        patient = client.resources("Patient").get(id=patient_id)
+        patient = client.resources("Patient").search(_id=patient_id).get()
         patient_json = patient.serialize()
 
         # Convert FHIR resources to JSON
