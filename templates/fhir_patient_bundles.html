@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block content %}
+
+
+<div class="intro-container">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Search Results</h1>
+            <h2>Result Body Payload</h2>
+            <div class="button-inline">
+                <button onclick="window.location.href='{{ url_for('fhir_patient_search') }}'" class="button" type="button">🔍
+                    FHIR
+                    Search Page</button>
+            </div>
+            <pre id="json"></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    var data = {{ bundle_json|tojson|safe }};
+    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+</script>
+
+{% endblock %}
