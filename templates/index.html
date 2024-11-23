@@ -11,8 +11,7 @@
     </div>
     <br>
     <div class="">
-        <h2>Find HL7 FHIR Patient Summary on HAPI</h2>
-        <p>Select a FHIR patient summary from HAPI FHIR.</p>
+        <h2>Select HL7 FHIR Patient Information on HAPI</h2>
         <p>The document found can be edited but note: <span class="bold">These documents belong to other HAPI FHIR
                 users</span></p>
         <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}' " class="button" type="button">🔥
@@ -20,12 +19,19 @@
             Search Page</button>
     </div>
     <br>
-    <div class="download">
+    <div class="">
+        <h2>Search for HL7 FHIR Patient Summary</h2>
+        <p>Search for a FHIR patient summary on HAPI FHIR.</p>
+        <p>Search by name, family, given, birthdate, email, phone, address, city, state, or age.</p>
+        <button onclick="window.location.href='{{ url_for('fhir_patient_search') }}'" class="button" type="button">🔍
+            FHIR
+            Search Page</button>
+    <!-- <div class="download">
         <h2>Download HL7 CDA Document</h2>
         <p>🚧 Work in progress: You can also download a converted copy of the FHIR patient summary as an HL7 CDA
             document.</p>
         <button onclick="window.location.href='#'" class="button" type="button" disabled>Download HL7 CDA</button>
-    </div>
+    </div> -->
 
 
 </div>
