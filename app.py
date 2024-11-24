@@ -37,16 +37,16 @@ def get_patient_summary():
         patient_record = create_sample_patient_record()
         return render_template("fhir_template.html", patient_json=patient_record)
 
-    except Exception as e:
+    except ValueError as e:
         flash("Error generating patient record: " + str(e), "alert-danger")
         return redirect(url_for("index"))
 
 
 @app.route("/hl7/patient_summary/fhir/select", methods=["GET", "POST"])
 def fhir_patient_list():
-    """Get a list of patients from the HAPI server and display them to the user"""
+    """Get a list of patients from the HAPI FHIR server and display them to the user"""
 
-    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    client = SyncFHIRClient(FHIR_SERVER_URL)
     try:
         patients = client.resources("Patient").sort("-_lastUpdated").limit(100).fetch()
 
@@ -57,12 +57,11 @@ def fhir_patient_list():
                     "id": patient.id,
                 }
             )
-            # print(patient_list)
 
         return render_template("fhir_patient_list.html", patients=patient_list)
     except Exception as e:
         flash("Error fetching patient list: " + str(e), "alert-danger")
-        return redirect(url_for("index"))
+        return render_template("fhir_patient_list.html")
 
 
 @app.route("/hl7/patient_summary/fhir/patient/search", methods=["GET", "POST"])
@@ -72,20 +71,48 @@ def fhir_patient_search():
         form_data = request.form
         resource_type = form_data.get("resource_type")
         search_detail = {
+            "_id": form_data.get("id"),
             "given": form_data.get("given"),
             "family": form_data.get("family"),
-
+            "practitioner_role": form_data.get("practitioner_role"),
+            "practitioner_specialty": form_data.get("practitioner_specialty"),
+            "practitioner_qualification": form_data.get("practitioner_qualification"),
+            "observation_code": form_data.get("observation_code"),
+            "observation_date": form_data.get("observation_date"),
+            "observation_value": form_data.get("observation_value"),
+            "medication_code": form_data.get("medication_code"),
+            "medication_name": form_data.get("medication_name"),
+            "medication_form": form_data.get("medication_form"),
         }
 
-        # Remove empty values from the search detail
-        specific_detail = {k: v for k, v in search_detail.items() if v}
-        
+        client = SyncFHIRClient(FHIR_SERVER_URL)
 
-        client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
         try:
-            patients = client.resources(resource_type).search(**specific_detail).fetch()
-            
-            bundle_json = [patient.serialize() for patient in patients]
+            if resource_type == "Patient":
+                search_params = {k: v for k, v in search_detail.items() if v}
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            elif resource_type == "Practitioner":
+                search_params = {k: v for k, v in search_detail.items() if v}
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            elif resource_type == "Observation":
+                search_params = {k: v for k, v in search_detail.items() if v}
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            elif resource_type == "Medication":
+                search_params = {k: v for k, v in search_detail.items() if v}
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            else:
+                flash(f"Unsupported resource type: {resource_type}", "alert-danger")
+                return redirect(url_for("fhir_patient_search"))
+
+            bundle_json = [resource.serialize() for resource in resources[:1]]
 
             return render_template("fhir_patient_bundles.html", bundle_json=bundle_json)
 
@@ -109,7 +136,7 @@ def fhir_patient_summary(patient_id):
         patient_id = request.form.get("patient_id")
         return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
 
-    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    client = SyncFHIRClient(FHIR_SERVER_URL)
 
     try:
         patient = client.resources("Patient").search(_id=patient_id).get()
@@ -359,7 +386,7 @@ def extract_patient_text(patient_json, text_type):
 def edit_fhir_patient():
     """Edit a patient record in the HAPI FHIR server."""
 
-    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    client = SyncFHIRClient(FHIR_SERVER_URL)
     patient_id = request.args.get("patient_id")
 
     if request.method == "POST":
@@ -591,6 +618,7 @@ def new_fhir_patient():
         # Create a new patient record with submitted form data
         form_data = request.form
         new_patient = {
+            "id": secrets.token_hex(16),
             "resourceType": "Patient",
             "gender": form_data.get("gender", ""),
             "birthDate": form_data.get("birth_date", ""),
@@ -773,7 +801,7 @@ def new_fhir_patient():
         }
 
         print("New Patient Data:", new_patient)
-        client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+        client = SyncFHIRClient(FHIR_SERVER_URL)
         try:
             # Create a new patient on the HAPI FHIR server
             patient_resource = client.resource("Patient", **new_patient)
@@ -843,7 +871,7 @@ def get_relationship_code(contact_relationship):
 def delete_fhir_patient():
     """Delete a patient record from the HAPI FHIR server."""
 
-    client = SyncFHIRClient("http://hapi.fhir.org/baseR4")
+    client = SyncFHIRClient(os.getenv("FHIR_SERVER_URL"))
     patient_id = request.args.get("patient_id")
 
     if request.method == "POST":
@@ -881,8 +909,17 @@ def internal_server_error(e):
     return render_template("500.html"), 500
 
 
+if DEVELOPMENT:
+    FHIR_SERVER_URL = os.getenv("FHIR_SERVER_URL")
+else:
+    FHIR_SERVER_URL = "https://hapi.fhir.org/baseR4"
+
 if __name__ == "__main__":
     if DEVELOPMENT:
-        app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=True)
+        app.run(
+            host=os.getenv("IP"),
+            port=os.getenv("PORT"),
+            debug=True,
+        )
     else:
         app.run(host=os.getenv("IP"), port=os.getenv("PORT"), debug=False)
