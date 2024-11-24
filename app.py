@@ -93,22 +93,22 @@ def fhir_patient_search():
 
         try:
             if resource_type == "Patient":
-                search_params = {k: v for k, v in search_detail.items() if v}
+                search_params = filter_search_params(search_detail)
                 resources = (
                     client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Practitioner":
-                search_params = {k: v for k, v in search_detail.items() if v}
+                search_params = filter_search_params(search_detail)
                 resources = (
                     client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Observation":
-                search_params = {k: v for k, v in search_detail.items() if v}
+                search_params = filter_search_params(search_detail)
                 resources = (
                     client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Medication":
-                search_params = {k: v for k, v in search_detail.items() if v}
+                search_params = filter_search_params(search_detail)
                 resources = (
                     client.resources(resource_type).search(**search_params).fetch()
                 )
@@ -917,6 +917,11 @@ if DEVELOPMENT:
     FHIR_SERVER_URL = os.getenv("FHIR_SERVER_URL")
 else:
     FHIR_SERVER_URL = "https://hapi.fhir.org/baseR4"
+
+def filter_search_params(search_detail):
+    """Filter search parameters to remove empty values"""
+    return {k: v for k, v in search_detail.items() if v}
+
 
 if __name__ == "__main__":
     if DEVELOPMENT:
