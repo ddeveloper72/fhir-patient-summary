@@ -9,62 +9,86 @@
             <form method="POST" action="{{ url_for('fhir_patient_search') }}">
                 <div class="form-group">
                     <label for="resource_type">Resource Type</label>
-                    <select class="form-control" name="resource_type" id="resource_type">
+                    <select class="form-control" name="resource_type" id="resource_type" onchange="showRelevantFormSection()">
                         <option value="" disabled selected>Select</option>
                         <option value="Patient">Patient</option>
                         <option value="Practitioner">Practitioner</option>
-                        <option value="Location">Location</option>
-                        <option value="Organization">Organization</option>
                         <option value="Observation">Observation</option>
                         <option value="Medication">Medication</option>
-                        <option value="MedicationRequest">MedicationRequest</option>
-                        <option value="MedicationDispense">MedicationDispense</option>
-                        <option value="MedicationAdministration">MedicationAdministration</option>
-                        <option value="MedicationStatement">MedicationStatement</option>
-                        <option value="MedicationUsage">MedicationUsage</option>
-                        <option value="MedicationKnowledge">MedicationKnowledge</option>
-                        <option value="MedicationIndication">MedicationIndication</option>
                     </select>
-                <div class="form-group">
-                    <label for="given">Name</label>
-                    <input type="text" class="form-control" id="given" name="given" placeholder="Enter name">
                 </div>
-                <div class="form-group">
-                    <label for="family">Family</label>
-                    <input type="text" class="form-control" id="family" name="family" placeholder="Enter family name">
+                <div id="patient-form" class="form-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" id="id" name="id" placeholder="Enter ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="given">Name</label>
+                        <input type="text" class="form-control" id="given" name="given" placeholder="Enter name">
+                    </div>
+                    <div class="form-group">
+                        <label for="family">Family</label>
+                        <input type="text" class="form-control" id="family" name="family" placeholder="Enter family name, eg O'Brien">
+                    </div>
+                    <div class="form-group">
+                        <label for="given">Given</label>
+                        <input type="text" class="form-control" id="given" name="given" placeholder="Enter given name, eg Bob">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="given">Given</label>
-                    <input type="text" class="form-control" id="given" name="given" placeholder="Enter given name">
+                <div id="practitioner-form" class="form-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="practitioner_role">Role</label>
+                        <input type="text" class="form-control" id="practitioner_role" name="practitioner_role" placeholder="Enter role">
+                    </div>
+                    <div class="form-group">
+                        <label for="practitioner_specialty">Specialty</label>
+                        <input type="text" class="form-control" id="practitioner_specialty" name="practitioner_specialty" placeholder="Enter specialty">
+                    </div>
+                    <div class="form-group">
+                        <label for="practitioner_qualification">Qualification</label>
+                        <input type="text" class="form-control" id="practitioner_qualification" name="practitioner_qualification" placeholder="Enter qualification">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="birthdate">Birthdate</label>
-                    <input type="date" class="form-control" id="birthdate" name="birthdate">
+                <div id="observation-form" class="form-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="observation_code">Observation Code</label>
+                        <input type="text" class="form-control" id="observation_code" name="observation_code" placeholder="Enter observation code">
+                    </div>
+                    <div class="form-group">
+                        <label for="observation_date">Observation Date</label>
+                        <input type="date" class="form-control" id="observation_date" name="observation_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="observation_value">Observation Value</label>
+                        <input type="text" class="form-control" id="observation_value" name="observation_value" placeholder="Enter observation value">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                <div id="medication-form" class="form-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="medication_code">Medication Code</label>
+                        <input type="text" class="form-control" id="medication_code" name="medication_code" placeholder="Enter medication code">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication_name">Medication Name</label>
+                        <input type="text" class="form-control" id="medication_name" name="medication_name" placeholder="Enter medication name">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication_form">Medication Form</label>
+                        <input type="text" class="form-control" id="medication_form" name="medication_form" placeholder="Enter medication form">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
-                </div>
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <input type="text" class="form-control" id="address" name="address" placeholder="Enter address">
-                </div>
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" class="form-control" id="city" name="city" placeholder="Enter city">
-                </div>
-                <div class="form-group">
-                    <label for="state">State</label>
-                    <input type="text" class="form-control" id="state" name="state" placeholder="Enter state">
-                </div>
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="number" class="form-control" id="age" name="age" placeholder="Enter age">
-                </div>
+                <script>
+                    function showRelevantFormSection() {
+                        var resourceType = document.getElementById('resource_type').value;
+                        var formSections = document.getElementsByClassName('form-section');
+                        for (var i = 0; i < formSections.length; i++) {
+                            formSections[i].style.display = 'none';
+                        }
+                        if (resourceType) {
+                            document.getElementById(resourceType.toLowerCase() + '-form').style.display = 'block';
+                        }
+                    }
+                </script>
                 <button type="submit" class="button">Search</button>
             </form>
 
