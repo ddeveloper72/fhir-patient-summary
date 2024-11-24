@@ -71,18 +71,22 @@ def fhir_patient_search():
         form_data = request.form
         resource_type = form_data.get("resource_type")
         search_detail = {
-            "_id": form_data.get("id"),
-            "given": form_data.get("given"),
-            "family": form_data.get("family"),
-            "practitioner_role": form_data.get("practitioner_role"),
-            "practitioner_specialty": form_data.get("practitioner_specialty"),
-            "practitioner_qualification": form_data.get("practitioner_qualification"),
-            "observation_code": form_data.get("observation_code"),
-            "observation_date": form_data.get("observation_date"),
-            "observation_value": form_data.get("observation_value"),
-            "medication_code": form_data.get("medication_code"),
-            "medication_name": form_data.get("medication_name"),
-            "medication_form": form_data.get("medication_form"),
+            "_id: Patient": form_data.get("id"),
+            "given: Patient": form_data.get("given"),
+            "family: Patient": form_data.get("family"),
+            "birthdate: Patient": form_data.get("birthdate"),
+            "_id: Practitioner": form_data.get("practitioner_id"),
+            "given: Practitioner": form_data.get("practitioner_given"),
+            "family: Practitioner": form_data.get("practitioner_family"),
+            "address-city: Practitioner": form_data.get("practitioner_city"),
+            "_id: Observation": form_data.get("observation_id"),
+            "code: Observation": form_data.get("observation_code"),
+            "performer: Observation": form_data.get("observation_performer"),
+            "_id: Medication": form_data.get("medication_id"),
+            "lot-number: Medication": form_data.get("lot_number"),
+            "ingredient-code: Medication": form_data.get("ingredient_code"),
+            "identifier: Medication": form_data.get("medication_name"),
+            "form: Medication": form_data.get("dose_form"),
         }
 
         client = SyncFHIRClient(FHIR_SERVER_URL)
