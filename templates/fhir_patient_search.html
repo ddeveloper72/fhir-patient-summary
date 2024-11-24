@@ -6,10 +6,14 @@
         <div class="card-body">
             <h1 class="card-title">Search HAPI for FHIR patient</h1>
             <h3>Instructions</h3>
+            <p>🚧 Work in progress:<br>Select a resource type and then use the form to enter search parameters for the
+                resource.</p>
+                <br>
             <form method="POST" action="{{ url_for('fhir_patient_search') }}">
                 <div class="form-group">
                     <label for="resource_type">Resource Type</label>
-                    <select class="form-control" name="resource_type" id="resource_type" onchange="showRelevantFormSection()">
+                    <select class="form-control" name="resource_type" id="resource_type"
+                        onchange="showRelevantFormSection()">
                         <option value="" disabled selected>Select</option>
                         <option value="Patient">Patient</option>
                         <option value="Practitioner">Practitioner</option>
@@ -28,53 +32,74 @@
                     </div>
                     <div class="form-group">
                         <label for="family">Family</label>
-                        <input type="text" class="form-control" id="family" name="family" placeholder="Enter family name, eg O'Brien">
+                        <input type="text" class="form-control" id="family" name="family"
+                            placeholder="Enter family name, eg Brown">
                     </div>
                     <div class="form-group">
-                        <label for="given">Given</label>
-                        <input type="text" class="form-control" id="given" name="given" placeholder="Enter given name, eg Bob">
+                        <label for="birthdate">Birthdate</label>
+                        <input type="date" class="form-control" id="birthdate" name="birthdate"
+                            placeholder="Enter birthdate, eg 01-01-1989">
                     </div>
                 </div>
                 <div id="practitioner-form" class="form-section" style="display: none;">
                     <div class="form-group">
-                        <label for="practitioner_role">Role</label>
-                        <input type="text" class="form-control" id="practitioner_role" name="practitioner_role" placeholder="Enter role">
+                        <label for="practitioner_id">ID</label>
+                        <input type="text" class="form-control" id="practitioner_id" name="practitioner_id"
+                            placeholder="Enter ID">
                     </div>
                     <div class="form-group">
-                        <label for="practitioner_specialty">Specialty</label>
-                        <input type="text" class="form-control" id="practitioner_specialty" name="practitioner_specialty" placeholder="Enter specialty">
+                        <label for="practioner_given">Given Name</label>
+                        <input type="text" class="form-control" id="practioner_given" name="practitioner_given"
+                            placeholder="Enter Given Name">
                     </div>
                     <div class="form-group">
-                        <label for="practitioner_qualification">Qualification</label>
-                        <input type="text" class="form-control" id="practitioner_qualification" name="practitioner_qualification" placeholder="Enter qualification">
+                        <label for="practitioner_family">Family Name</label>
+                        <input type="text" class="form-control" id="practitioner_family" name="practitioner_family"
+                            placeholder="Enter Family Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="practitioner_city">City</label>
+                        <input type="text" class="form-control" id="practitioner_city" name="practitioner_city"
+                            placeholder="Enter City eg PleasantVille">
                     </div>
                 </div>
                 <div id="observation-form" class="form-section" style="display: none;">
                     <div class="form-group">
+                        <label for="observation_id">Observation ID</label>
+                        <input type="text" class="form-control" id="observation_id" name="observation_id"
+                            placeholder="Enter observation ID, e.g., 12345">
+                    </div>
+                    <div class="form-group">
                         <label for="observation_code">Observation Code</label>
-                        <input type="text" class="form-control" id="observation_code" name="observation_code" placeholder="Enter observation code, e.g., 12345-6">
-                    </div>
-                    <div class="form-group">
-                        <label for="observation_date">Observation Date</label>
-                        <input type="date" class="form-control" id="observation_date" name="observation_date">
-                    </div>
-                    <div class="form-group">
-                        <label for="observation_value">Observation Value</label>
-                        <input type="text" class="form-control" id="observation_value" name="observation_value" placeholder="Enter observation value, e.g., 98.6">
+                        <input type="text" class="form-control" id="observation_code" name="observation_code"
+                            placeholder="Enter observation code, e.g., 20005">
                     </div>
                 </div>
                 <div id="medication-form" class="form-section" style="display: none;">
                     <div class="form-group">
-                        <label for="medication_code">Medication Code</label>
-                        <input type="text" class="form-control" id="medication_code" name="medication_code" placeholder="Enter medication code, e.g., 12345-6">
+                        <label for="medication_id">Medication ID</label>
+                        <input type="text" class="form-control" id="medication_id" name="medication_id"
+                            placeholder="Enter medication ID, e.g., 12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="lot_number">Batch Lot Number</label>
+                        <input type="text" class="form-control" id="lot_number" name="lot_number"
+                            placeholder="Enter Batch lot number, e.g., 9494788">
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredient_code">Ingredient Code</label>
+                        <input type="text" class="form-control" id="ingredient_code" name="ingredient_code"
+                            placeholder="Enter ingredient code, e.g., 901813">
                     </div>
                     <div class="form-group">
                         <label for="medication_name">Medication Name</label>
-                        <input type="text" class="form-control" id="medication_name" name="medication_name" placeholder="Enter medication name, e.g., Aspirin">
+                        <input type="text" class="form-control" id="medication_name" name="medication_name"
+                            placeholder="Enter medication name, e.g., Tylenol">
                     </div>
                     <div class="form-group">
-                        <label for="medication_form">Medication Form</label>
-                        <input type="text" class="form-control" id="medication_form" name="medication_form" placeholder="Enter medication form, e.g., Tablet">
+                        <label for="dose_form">Dose Form</label>
+                        <input type="text" class="form-control" id="dose_form" name="dose_form"
+                            placeholder="Enter medication dose form, e.g., Tablet">
                     </div>
                 </div>
                 <script>
@@ -89,7 +114,12 @@
                         }
                     }
                 </script>
-                <button type="submit" class="button">Search</button>
+                <br>
+                <div class="button-inline">
+                    <button type="submit" class="button">Search</button>
+                    <button onclick="window.location.href='{{ url_for('index') }}';" class="button"
+                        type="button">Return</button>
+                </div>
             </form>
 
 
