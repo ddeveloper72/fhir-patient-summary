@@ -515,8 +515,14 @@
                             <div class="col-md">
                                 <div class="form-group">
                                     <label for="contact_family_name_prefix">Prefix</label>
-                                    <input type="text" class="form-control" id="contact_family_name_prefix"
-                                        name="contact_family_name_prefix">
+                                    <select class="form-control" id="contact_family_name_prefix" name="contact_family_name_prefix" required>
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="Mr.">Mr.</option>
+                                        <option value="Mrs.">Mrs.</option>
+                                        <option value="Ms.">Ms.</option>
+                                        <option value="Dr.">Dr.</option>
+                                        <option value="Prof.">Prof.</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
