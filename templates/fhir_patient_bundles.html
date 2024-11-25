@@ -16,9 +16,4 @@
     </div>
 </div>
 
-<script>
-    var data = {{ bundle_json|tojson|safe }};
-    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
-</script>
-
 {% endblock %}
