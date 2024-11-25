@@ -102,18 +102,6 @@
                             placeholder="Enter medication dose form, e.g., Tablet">
                     </div>
                 </div>
-                <script>
-                    function showRelevantFormSection() {
-                        var resourceType = document.getElementById('resource_type').value;
-                        var formSections = document.getElementsByClassName('form-section');
-                        for (var i = 0; i < formSections.length; i++) {
-                            formSections[i].style.display = 'none';
-                        }
-                        if (resourceType) {
-                            document.getElementById(resourceType.toLowerCase() + '-form').style.display = 'block';
-                        }
-                    }
-                </script>
                 <br>
                 <div class="button-inline">
                     <button type="submit" class="button">Search</button>
