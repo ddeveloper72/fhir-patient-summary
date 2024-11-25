@@ -182,17 +182,6 @@
                         </div>
                     </div>
                 </div>
-
-                <script>
-                    function toggleBirthOrder(select) {
-                        var birthOrderGroup = document.getElementById('birth_order_group');
-                        if (select.value === 'True') {
-                            birthOrderGroup.style.display = 'block';
-                        } else {
-                            birthOrderGroup.style.display = 'none';
-                        }
-                    }
-                </script>
                 <div class="row g-2">
                     <div class="col-md">
                         <div class="form-group">
@@ -212,18 +201,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                <script>
-                    function toggleDateOfDeath(select) {
-                        var dateOfDeathGroup = document.getElementById('date_of_death_group');
-                        if (select.value === 'True') {
-                            dateOfDeathGroup.style.display = 'block';
-                        } else {
-                            dateOfDeathGroup.style.display = 'none';
-                        }
-                    }
-                </script>
 
                 <div class="row g-2">
                     <div class="col-md">
@@ -440,28 +417,6 @@
                                 </select>
                             </div>
                         </div>
-                        <script>
-                            function updatePreferredLanguageOptions() {
-                                var checkboxes = document.querySelectorAll('input[name="languages"]:checked'); // Get all checked checkboxes
-                                var preferredLanguageSelect = document.getElementById('preferred_language'); // Get the preferred language select element
-                                preferredLanguageSelect.innerHTML = '<option value="" disabled selected>Select</option>'; // Clear the preferred language select element
-
-                                checkboxes.forEach(function(checkbox) {
-                                    var option = document.createElement('option'); // Create a new option element
-                                    option.value = checkbox.value; // Set the option value to the checkbox value
-                                    option.text = checkbox.nextElementSibling.textContent; // Set the option text to the checkbox label text
-                                    preferredLanguageSelect.appendChild(option); // Append the option to the preferred language select element
-                                });
-                            }
-
-                            document.querySelectorAll('input[name="languages"]').forEach(function(checkbox) {
-                                checkbox.addEventListener('change', updatePreferredLanguageOptions); 
-                            });
-                        </script>
-
-
-
-
                         <div class="row g-2">
                             <div class="col-md">
                                 <h3>Contact Information</h3>
