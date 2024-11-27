@@ -15,4 +15,10 @@
 
 </div>
 
+<script>
+    var data = {{ patient_json|safe }};
+    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+</script>
+
+
 {% endblock %}
