@@ -59,7 +59,7 @@ def fhir_patient_list():
             )
 
         return render_template("fhir_patient_list.html", patients=patient_list)
-    except Exception as e:
+    except (ConnectionError, TimeoutError, ValueError) as e:
         flash("Error fetching patient list: " + str(e), "alert-danger")
         return render_template("fhir_patient_list.html")
 
@@ -120,7 +120,7 @@ def fhir_patient_search():
 
             return render_template("fhir_patient_bundles.html", bundle_json=bundle_json)
 
-        except Exception as e:
+        except (ConnectionError, TimeoutError, ValueError) as e:
             flash("Error fetching patient list: " + str(e), "alert-danger")
             return redirect(url_for("fhir_patient_list"))
 
@@ -151,7 +151,7 @@ def fhir_patient_summary(patient_id):
         for key, value in patient_json.items():
             patient_info.append({"key": key, "value": value})
 
-    except Exception as e:
+    except (ConnectionError, TimeoutError, ValueError) as e:
         flash("The patient ID was not found: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
@@ -590,7 +590,7 @@ def edit_fhir_patient():
             patient_resource.save()
             flash("Patient information updated successfully.", "alert-success")
             return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
-        except Exception as e:
+        except (ConnectionError, TimeoutError, ValueError) as e:
             flash("Error updating patient: " + str(e), "alert-danger")
             return redirect(url_for("fhir_patient_summary", patient_id=patient_id))
 
@@ -813,7 +813,7 @@ def new_fhir_patient():
             flash("New patient record created successfully.", "alert-success")
             # print("Form data: ", form_data)
             return redirect(url_for("fhir_patient_list"))
-        except Exception as e:
+        except (ConnectionError, TimeoutError, ValueError) as e:
             flash("Error creating new patient: " + str(e), "alert-danger")
             return redirect(url_for("fhir_patient_list"))
 
@@ -885,14 +885,14 @@ def delete_fhir_patient():
             patient.delete()
             flash("Patient record deleted successfully.", "alert-success")
             return redirect(url_for("fhir_patient_list"))
-        except Exception as e:
+        except (ConnectionError, TimeoutError, ValueError) as e:
             flash("Error deleting patient record: " + str(e), "alert-danger")
             return redirect(url_for("fhir_patient_list"))
 
     try:
         patient = client.resources("Patient").get(id=patient_id)
         return render_template("delete_fhir_patient.html", patient=patient)
-    except Exception as e:
+    except (ConnectionError, TimeoutError, ValueError) as e:
         flash("Error fetching patient record: " + str(e), "alert-danger")
         return redirect(url_for("fhir_patient_list"))
 
