@@ -299,19 +299,21 @@
                     </div>
                 </div>
                 <div class="row g-2">
-                    <label for="languages">Languages Spoken</label>
                     <div class="col-md">
-                        {% for communication in patient.communication %}
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" name="languages"
-                                id="languages_{{ loop.index }}" value="{{ communication.language.coding[0].display }}"
-                                checked>
-                            <label for="languages_{{ loop.index }}">{{ communication.language.coding[0].display.capitalize()
-                                }}</label>
+                        <div class="form-group">
+                            <label for="languages">Languages Spoken</label>
+                                {% for communication in patient.communication %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="languages"
+                                        id="languages_{{ loop.index }}" value="{{ communication.language.coding[0].display }}"
+                                        checked>
+                                    <label for="languages_{{ loop.index }}">{{ communication.language.coding[0].display.capitalize()
+                                        }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        {% endfor %}
-                    </div>
-
+              
                     <div class="form-group">
                         <label for="preferred_language">Preferred Language</label>
                         <select type="text" class="form-control" name="preferred_language" id="preferred_language"
@@ -319,7 +321,7 @@
                             {% for communication in patient.communication %}
                             <option value="{{ communication.language.coding[0].display }}" {% if communication.preferred
                                 %} selected {% endif %}>
-                                {{ communication.language.coding[0].display }}
+                                {{ communication.language.coding[0].display.capitalize() }}
                             </option>
                             {% endfor %}
                         </select>
@@ -374,9 +376,26 @@
                     <div class="col-md">
                         <div class="form-group">
                             <label for="contact_family_name_prefix">Prefix</label>
-                            <input type="text" class="form-control" name="contact_family_name_prefix"
+                            <select type="text" class="form-control" name="contact_family_name_prefix"
                                 id="contact_family_name_prefix"
                                 value="{{ patient.contact[0].name._family.extension[0].valueString if patient.contact else '' }}">
+                                {% if patient.contact and patient.contact[0].name._family.extension[0].valueString == 'Mr.' %}
+                                <option value="Mr.">Mr.</option>
+                                {% elif patient.contact and patient.contact[0].name._family.extension[0].valueString == 'Mrs.' %}
+                                <option value="Mrs.">Mrs.</option>
+                                {% elif patient.contact and patient.contact[0].name._family.extension[0].valueString == 'Ms.' %}
+                                <option value="Ms.">Ms.</option>
+                                {% elif patient.contact and patient.contact[0].name._family.extension[0].valueString == 'Dr.' %}
+                                <option value="Dr.">Dr.</option>
+                                {% elif patient.contact and patient.contact[0].name._family.extension[0].valueString == 'Prof.' %}
+                                <option value="Prof.">Prof.</option>
+                                {% endif %}
+                                <option value="Mr.">Mr.</option>
+                                <option value="Mrs.">Mrs.</option>
+                                <option value="Ms.">Ms.</option>
+                                <option value="Dr.">Dr.</option>
+                                <option value="Prof.">Prof.</option>
+                                </select>
                         </div>
                     </div>
                 </div>
