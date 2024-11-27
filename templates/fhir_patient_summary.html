@@ -81,5 +81,9 @@
         <button class="button" onclick="window.location.href='{{ url_for('fhir_patient_list') }}'">Return</button>
     </div>
 </div>
+<script>
+    var data = {{ patient_json|tojson|safe }};
+    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+</script>
 
 {% endblock %}
