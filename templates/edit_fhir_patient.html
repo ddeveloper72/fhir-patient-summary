@@ -306,7 +306,7 @@
                             <input type="checkbox" class="form-check-input" name="languages"
                                 id="languages_{{ loop.index }}" value="{{ communication.language.coding[0].display }}"
                                 checked>
-                            <label for="languages_{{ loop.index }}">{{ communication.language.coding[0].display
+                            <label for="languages_{{ loop.index }}">{{ communication.language.coding[0].display.capitalize()
                                 }}</label>
                         </div>
                         {% endfor %}
