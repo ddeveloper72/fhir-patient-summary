@@ -25,8 +25,12 @@ const initializePatientIdToggle = () => {
 // render json data
 
 const renderJson = () => {
-    var data = JSON.parse('{{ patient_json|safe|escapejs }}');
-    document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+    fetch('/hl7/patient_summary/fhir/json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("json").innerHTML = JSON.stringify(data, null, 2);
+        })
+        .catch(error => console.error('Error fetching patient JSON:', error));
 };
 
 
@@ -83,3 +87,5 @@ const updatePreferredLanguageOptions = () => {
 document.querySelectorAll('input[name="languages"]').forEach((checkbox) => {
     checkbox.addEventListener('change', updatePreferredLanguageOptions);
 });
+
+
