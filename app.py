@@ -88,11 +88,10 @@ def fhir_patient_search():
             "identifier: Medication": form_data.get("medication_name"),
             "form: Medication": form_data.get("dose_form"),
             "_id: MedicationRequest": form_data.get("medication_request_id"),
-            "given: MedicationRequest": form_data.get("medication_request_given"),
-            "family: MedicationRequest": form_data.get("medication_request_family"),
-            "birthdate: MedicationRequest": form_data.get(
-                "medication_request_birthdate"
-            ),
+            "status: MedicationRequest": form_data.get("medication_request_status"),
+            "medication: MedicationRequest": form_data.get("medication_request_medication"),
+            "patient: MedicationRequest": form_data.get("medication_request_patient"),
+            
         }
 
         client = SyncFHIRClient(FHIR_SERVER_URL)
