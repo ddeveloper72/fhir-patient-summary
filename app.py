@@ -91,6 +91,10 @@ def fhir_patient_search():
             "status: MedicationRequest": form_data.get("medication_request_status"),
             "medication: MedicationRequest": form_data.get("medication_request_medication"),
             "patient: MedicationRequest": form_data.get("medication_request_patient"),
+            "_id: MedicationDispense": form_data.get("medication_dispense_id"),
+            "status: MedicationDispense": form_data.get("medication_dispense_status"),
+            "medication: MedicationDispense": form_data.get("medication_dispense_medication"),
+            "patient: MedicationDispense": form_data.get("medication_dispense_patient"),
             
         }
 
@@ -118,6 +122,11 @@ def fhir_patient_search():
                     client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "MedicationRequest":
+                search_params = filter_search_params(search_detail)
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            elif resource_type == "MedicationDispense":
                 search_params = filter_search_params(search_detail)
                 resources = (
                     client.resources(resource_type).search(**search_params).fetch()
