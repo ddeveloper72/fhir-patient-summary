@@ -8,7 +8,7 @@
             <h3>Instructions</h3>
             <p>🚧 Work in progress:<br>Select a resource type and then use the form to enter search parameters for the
                 resource.</p>
-                <br>
+            <br>
             <form method="POST" action="{{ url_for('fhir_patient_search') }}">
                 <div class="form-group">
                     <label for="resource_type">Resource Type</label>
@@ -19,7 +19,7 @@
                         <option value="Practitioner">Practitioner</option>
                         <option value="Observation">Observation</option>
                         <option value="Medication">Medication</option>
-                        <option value="MedicationRequest">MedicationRequest</option>
+                        <option value="MedicationRequest">Medication Request</option>
                     </select>
                 </div>
                 <div id="patient-form" class="form-section" style="display: none;">
@@ -103,7 +103,7 @@
                             placeholder="Enter medication dose form, e.g., Tablet">
                     </div>
                 </div>
-                <div id="medication-request-form" class="form-section" style="display: none;">
+                <div id="medicationrequest-form" class="form-section" style="display: none;">
                     <div class="form-group">
                         <label for="medication_request_id">Medication Request ID</label>
                         <input type="text" class="form-control" id="medication_request_id" name="medication_request_id"
@@ -111,13 +111,21 @@
                     </div>
                     <div class="form-group">
                         <label for="medication_request_status">Medication Request Status</label>
-                        <input type="text" class="form-control" id="medication_request_status" name="medication_request_status"
+                        <input type="text" class="form-control" id="medication_request_status"
+                            name="medication_request_status"
                             placeholder="Enter medication request status, e.g., active">
                     </div>
                     <div class="form-group">
                         <label for="medication_request_medication">Medication Request Medication</label>
-                        <input type="text" class="form-control" id="medication_request_medication" name="medication_request_medication"
+                        <input type="text" class="form-control" id="medication_request_medication"
+                            name="medication_request_medication"
                             placeholder="Enter medication request medication, e.g., 12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication_request_patient">Medication Request Patient</label>
+                        <input type="text" class="form-control" id="medication_request_patient"
+                            name="medication_request_patient"
+                            placeholder="Enter medication request patient, e.g., 12345">
                     </div>
                 </div>
                 <br>
