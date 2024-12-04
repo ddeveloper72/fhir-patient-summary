@@ -37,6 +37,24 @@
                 </div>
                 <br><br>
             </form>
+            <script>
+                document.getElementById('patient_list').addEventListener('change', function () {
+                    var customPatientIdContainer = document.getElementById('custom-patient-id-container');
+                    if (this.value === 'custom') {
+                        customPatientIdContainer.style.display = 'block';
+                    } else {
+                        customPatientIdContainer.style.display = 'none';
+                    }
+                });
+
+                document.getElementById('patient-form').addEventListener('submit', function (event) {
+                    var patientList = document.getElementById('patient_list');
+                    var customPatientId = document.getElementById('custom_patient_id');
+                    if (patientList.value === 'custom' && customPatientId.value.trim() !== '') {
+                        patientList.value = customPatientId.value.trim();
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>
