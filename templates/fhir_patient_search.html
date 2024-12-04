@@ -20,6 +20,7 @@
                         <option value="Observation">Observation</option>
                         <option value="Medication">Medication</option>
                         <option value="MedicationRequest">Medication Request</option>
+                        <option value="MedicationDispense">Medication Dispense</option>
                     </select>
                 </div>
                 <div id="patient-form" class="form-section" style="display: none;">
@@ -126,6 +127,31 @@
                         <input type="text" class="form-control" id="medication_request_patient"
                             name="medication_request_patient"
                             placeholder="Enter medication request patient, e.g., 12345">
+                    </div>
+                </div>
+                <div id="medicationdispense-form" class="form-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="medication_dispense_id">Medication Dispense ID</label>
+                        <input type="text" class="form-control" id="medication_dispense_id"
+                            name="medication_dispense_id" placeholder="Enter medication dispense ID, e.g., 12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication_dispense_status">Medication Dispense Status</label>
+                        <input type="text" class="form-control" id="medication_dispense_status"
+                            name="medication_dispense_status"
+                            placeholder="Enter medication dispense status, e.g., active">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication_dispense_medication">Medication Dispense Medication</label>
+                        <input type="text" class="form-control" id="medication_dispense_medication"
+                            name="medication_dispense_medication"
+                            placeholder="Enter medication dispense medication, e.g., 12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="medication_dispense_patient">Medication Dispense Patient</label>
+                        <input type="text" class="form-control" id="medication_dispense_patient"
+                            name="medication_dispense_patient"
+                            placeholder="Enter medication dispense patient, e.g., 12345">
                     </div>
                 </div>
                 <br>
