@@ -87,6 +87,12 @@ def fhir_patient_search():
             "ingredient-code: Medication": form_data.get("ingredient_code"),
             "identifier: Medication": form_data.get("medication_name"),
             "form: Medication": form_data.get("dose_form"),
+            "_id: MedicationRequest": form_data.get("medication_request_id"),
+            "given: MedicationRequest": form_data.get("medication_request_given"),
+            "family: MedicationRequest": form_data.get("medication_request_family"),
+            "birthdate: MedicationRequest": form_data.get(
+                "medication_request_birthdate"
+            ),
         }
 
         client = SyncFHIRClient(FHIR_SERVER_URL)
@@ -108,6 +114,11 @@ def fhir_patient_search():
                     client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Medication":
+                search_params = filter_search_params(search_detail)
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            elif resource_type == "MedicationRequest":
                 search_params = filter_search_params(search_detail)
                 resources = (
                     client.resources(resource_type).search(**search_params).fetch()
