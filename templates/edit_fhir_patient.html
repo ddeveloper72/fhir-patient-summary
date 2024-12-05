@@ -101,9 +101,9 @@
                         <div class="form-group">
                             <label for="address_use">Address Type</label>
                             <select name="address_use" class="form-control" id="address_use" required>
-                                {% if patient.address[0].use == 'home' %}
+                                {% if patient.address and patient.address[0].use == 'home' %}
                                 <option value="home" selected>Home</option>
-                                {% elif patient.telecom|length > 1 %}
+                                {% elif patient.address and patient.address[0].use == 'work' %}
                                 <option value="work" selected>Work</option>
                                 {% endif %}
                                 <option value="home">Home</option>
