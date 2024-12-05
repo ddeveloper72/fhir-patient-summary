@@ -22,6 +22,7 @@
                         <option value="MedicationRequest">Medication Request</option>
                         <option value="MedicationDispense">Medication Dispense</option>
                         <option value="MessageHeader">Message Header</option>
+                        <option value="ImagingStudy">Imaging Study</option>
                     </select>
                 </div>
                 <div id="patient-form" class="form-section" style="display: none;">
@@ -182,13 +183,48 @@
                         <input type="text" class="form-control" id="message_header_event" name="message_header_event"
                             placeholder="Enter message header event coding, e.g., ADT|A01">
                     </div>
-
-                    <br>
-                    <div class="button-inline">
-                        <button type="submit" class="button">Search</button>
-                        <button onclick="window.location.href='{{ url_for('index') }}';" class="button"
-                            type="button">Return</button>
+                </div>
+                <div id="imagingstudy-form" class="form-section" style="display: none;">
+                    <div class="form-group">
+                        <label for="imaging_study_id">Imaging Study ID</label>
+                        <input type="text" class="form-control" id="imaging_study_id" name="imaging_study_id"
+                            placeholder="Enter imaging study ID, e.g., 12345">
                     </div>
+                    <div class="form-group">
+                        <label for="imaging_study_patient">Imaging Study Patient</label>
+                        <input type="text" class="form-control" id="imaging_study_patient" name="imaging_study_patient"
+                            placeholder="Enter imaging study patient, e.g., 12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="imaging_study_modality">Imaging Study Modality</label>
+                        <label for="imaging_study_modality_code">Modality Code</label>
+                        <input type="text" class="form-control" id="imaging_study_modality_code" name="imaging_study_modality_code" placeholder="Enter modality code, e.g., CR">
+                        <label for="imaging_study_modality_display">Modality Display</label>
+                        <input type="text" class="form-control" id="imaging_study_modality_display" name="imaging_study_modality_display" placeholder="Enter modality display, e.g., Computed Radiography">
+                        <label for="imaging_study_modality_system">Modality System</label>
+                        <input type="text" class="form-control" id="imaging_study_modality_system" name="imaging_study_modality_system" placeholder="Enter modality system, e.g., http://dicom.nema.org/resources/ontology/DCM">
+                    </div>
+                    <div class="form-group">
+                        <label for="imaging_study_series">Imaging Study Series</label>
+                        <label for="imaging_study_series_body_site">Series Body Site</label>
+                        <input type="text" class="form-control" id="imaging_study_series_body_site" name="imaging_study_series_body_site" placeholder="Enter series body site, e.g., Thoracic structure">
+                        <label for="imaging_study_series_body_site_code">Series Body Site Code</label>
+                        <input type="text" class="form-control" id="imaging_study_series_body_site_code" name="imaging_study_series_body_site_code" placeholder="Enter series body site code, e.g., 51185008">
+                        <label for="imaging_study_series_body_site_system">Series Body Site System</label>
+                        <input type="text" class="form-control" id="imaging_study_series_body_site_system" name="imaging_study_series_body_site_system" placeholder="Enter series body site system, e.g., http://snomed.info/sct">
+                    </div>
+                    <div class="form-group">
+                        <label for="imaging_study_started">Imaging Study Started</label>
+                        <input type="date" class="form-control" id="imaging_study_started" name="imaging_study_started"
+                            placeholder="Enter imaging study started, e.g., 01-01-2021">
+                    </div>
+                </div>
+                <br>
+                <div class="button-inline">
+                    <button type="submit" class="button">Search</button>
+                    <button onclick="window.location.href='{{ url_for('index') }}';" class="button"
+                        type="button">Return</button>
+                </div>
             </form>
 
 
