@@ -179,17 +179,17 @@
                         <div class="form-group">
                             <label for="marital_status">Marital Status:</label>
                             <select name="marital_status" class="form-control" id="marital_status" required>
-                                {% if patient.maritalStatus.coding[0].code == 'M' %}
+                                {% if patient.maritalStatus and patient.maritalStatus.coding[0].code == 'M' %}
                                 <option value="M" selected>Married</option>
-                                {% elif patient.maritalStatus.coding[0].code == 'S' %}
+                                {% elif patient.maritalStatus and patient.maritalStatus.coding[0].code == 'S' %}
                                 <option value="S" selected>Single</option>
-                                {% elif patient.maritalStatus.coding[0].code == 'D' %}
+                                {% elif patient.maritalStatus and patient.maritalStatus.coding[0].code == 'D' %}
                                 <option value="D" selected>Divorced</option>
-                                {% elif patient.maritalStatus.coding[0].code == 'W' %}
+                                {% elif patient.maritalStatus and patient.maritalStatus.coding[0].code == 'W' %}
                                 <option value="W" selected>Widowed</option>
-                                {% elif patient.maritalStatus.coding[0].code == 'L' %}
+                                {% elif patient.maritalStatus and patient.maritalStatus.coding[0].code == 'L' %}
                                 <option value="L" selected>Legally Separated</option>
-                                {% elif patient.maritalStatus.coding[0].code == 'U' %}
+                                {% elif patient.maritalStatus and patient.maritalStatus.coding[0].code == 'U' %}
                                 <option value="U" selected>Unknown</option>
                                 {% endif %}
                                 <option value="M">Married</option>
