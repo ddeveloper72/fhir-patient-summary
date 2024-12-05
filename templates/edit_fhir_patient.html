@@ -122,12 +122,12 @@
                         </div>
                     </div>
                     <div class="col-md">
-                        {% if not patient.telecom[0].value and patient.telecom[0].system != 'phone' %}
+                        {% if patient.telecom and patient.telecom[0].value and patient.telecom[0].system != 'phone' %}
                         {% else %}
                         <div class="form-group">
                             <label for="phone_use">Phone Type</label>
                             <select class="form-control" id="phone_use" name="phone_use" required>
-                                {% if patient.telecom[0].use == 'home' %}
+                                {% if patient.telecom and patient.telecom[0].use == 'home' %}
                                 <option value="home" selected>Home</option>
                                 {% else %}
                                 <option value="work" selected>Work</option>
