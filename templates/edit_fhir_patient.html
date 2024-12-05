@@ -118,7 +118,7 @@
                         <div class="form-group">
                             <label for="phone">Phone:</label>
                             <input type="tel" class="form-control" name="phone" id="phone"
-                                value="{{ patient.telecom[0].value if patient.telecom[0].system == 'phone' else '' }}">
+                                value="{{ patient.telecom[0].value if patient.telecom and patient.telecom[0].system == 'phone' else '' }}">
                         </div>
                     </div>
                     <div class="col-md">
