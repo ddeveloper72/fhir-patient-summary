@@ -89,18 +89,26 @@ def fhir_patient_search():
             "form: Medication": form_data.get("dose_form"),
             "_id: MedicationRequest": form_data.get("medication_request_id"),
             "status: MedicationRequest": form_data.get("medication_request_status"),
-            "medication: MedicationRequest": form_data.get("medication_request_medication"),
+            "medication: MedicationRequest": form_data.get(
+                "medication_request_medication"
+            ),
             "patient: MedicationRequest": form_data.get("medication_request_patient"),
             "_id: MedicationDispense": form_data.get("medication_dispense_id"),
             "status: MedicationDispense": form_data.get("medication_dispense_status"),
-            "medication: MedicationDispense": form_data.get("medication_dispense_medication"),
+            "medication: MedicationDispense": form_data.get(
+                "medication_dispense_medication"
+            ),
             "patient: MedicationDispense": form_data.get("medication_dispense_patient"),
             "_id: MessageHeader": form_data.get("message_header_id"),
             "destination: MessageHeader": form_data.get("message_header_destination"),
             "source: MessageHeader": form_data.get("message_header_source"),
             "author: MessageHeader": form_data.get("message_header_author"),
             "event: MessageHeader": form_data.get("message_header_event"),
-            
+            "_id: ImagingStudy": form_data.get("imaging_study_id"),
+            "patient: ImagingStudy": form_data.get("imaging_study_patient"),
+            "modality: ImagingStudy": form_data.get("imaging_study_modality"),
+            "series: ImagingStudy": form_data.get("imaging_study_series"),
+            "started: ImagingStudy": form_data.get("imaging_study_started"),
         }
 
         client = SyncFHIRClient(FHIR_SERVER_URL)
@@ -109,51 +117,42 @@ def fhir_patient_search():
             if resource_type == "Patient":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Practitioner":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Observation":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "Medication":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "MedicationRequest":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "MedicationDispense":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             elif resource_type == "MessageHeader":
                 search_params = filter_search_params(search_detail)
                 resources = (
-                    client.resources(resource_type)
-                    .search(**search_params)
-                    .fetch()
+                    client.resources(resource_type).search(**search_params).fetch()
+                )
+            elif resource_type == "ImagingStudy":
+                search_params = filter_search_params(search_detail)
+                resources = (
+                    client.resources(resource_type).search(**search_params).fetch()
                 )
             else:
                 flash(f"Unsupported resource type: {resource_type}", "alert-danger")
@@ -960,6 +959,7 @@ if DEVELOPMENT:
     FHIR_SERVER_URL = os.getenv("FHIR_SERVER_URL")
 else:
     FHIR_SERVER_URL = "https://hapi.fhir.org/baseR4"
+
 
 def filter_search_params(search_detail):
     """Filter search parameters to remove empty values"""
