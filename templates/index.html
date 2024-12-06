@@ -10,28 +10,33 @@
             Bundle</button>
     </div>
     <br>
-    <div class="">
+    <div class="welcome">
         <h2>Select HL7 FHIR Patient Information on HAPI</h2>
-        <p>The document found can be edited. <span class="bold">Note These documents belong to other HAPI FHIR users</span></p>
+        <p>The document found can be edited. <span class="bold">Note These documents belong to other HAPI FHIR
+                users</span></p>
         <button onclick="window.location.href='{{ url_for('fhir_patient_list') }}' " class="button" type="button">🔥
             FHIR
             Search Page</button>
     </div>
     <br>
-    <div class="">
+    <div class="welcome">
         <h2>Search HL7 FHIR Resource Information on HAPI</h2>
-        <p>Search data within resources, on HAPI FHIR. <span class="bold">Note These documents belong to other HAPI FHIR users</span></p>
+        <p>Search data within resources, on HAPI FHIR. <span class="bold">Note These documents belong to other HAPI FHIR
+                users</span></p>
         <button onclick="window.location.href='{{ url_for('fhir_patient_search') }}'" class="button" type="button">🔍
             FHIR
             Search Page</button>
-    <!-- <div class="download">
-        <h2>Download HL7 CDA Document</h2>
-        <p>🚧 Work in progress: You can also download a converted copy of the FHIR patient summary as an HL7 CDA
-            document.</p>
-        <button onclick="window.location.href='#'" class="button" type="button" disabled>Download HL7 CDA</button>
-    </div> -->
-
-
+    </div>
+    <br>
+    <div class="welcome">
+        <h2>Setup a new HL7 FHIR Medication Request</h2>
+        <p>🚧 Work in progress: You can setup a new HL7 FHIR Medication Request</p>
+        <button onclick="window.location.href='{{ url_for('new_fhir_medication_request') }}'" class="button"
+            type="button">🔥
+            FHIR
+            Medication Request</button>
+    </div>
 </div>
+
 
 {% endblock %}
