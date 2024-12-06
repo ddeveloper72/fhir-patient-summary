@@ -1,0 +1,387 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="intro-container">
+    <h2 class="header">New Medication Request (FHIR)</h2>
+
+
+    <div class="card">
+        <div class="card-body">
+
+            <form method="post" action="{{ url_for('new_fhir_medication_request') }}">
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="identifier">Identifier</label>
+                            <input type="text" class="form-control" id="identifier" name="identifier">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="based_on">Based On</label>
+                            <input type="text" class="form-control" id="based_on" name="based_on">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="prior_prescription">Prior Prescription</label>
+                            <input type="text" class="form-control" id="prior_prescription" name="prior_prescription">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="group_identifier">Group Identifier</label>
+                            <input type="text" class="form-control" id="group_identifier" name="group_identifier">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <input type="text" class="form-control" id="status" name="status">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="status_reason">Status Reason</label>
+                            <input type="text" class="form-control" id="status_reason" name="status_reason">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="status_changed">Status Changed</label>
+                            <input type="date" class="form-control" id="status_changed" name="status_changed">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="intent">Intent</label>
+                            <input type="text" class="form-control" id="intent" name="intent">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="text" class="form-control" id="category" name="category">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <input type="text" class="form-control" id="priority" name="priority">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="do_not_perform">Do Not Perform</label>
+                            <input type="checkbox" class="form-check-input form-control" id="do_not_perform" name="do_not_perform">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="medication">Medication</label>
+                            <input type="text" class="form-control" id="medication" name="medication">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" class="form-control" id="subject" name="subject">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="information_source">Information Source</label>
+                            <input type="text" class="form-control" id="information_source" name="information_source">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="encounter">Encounter</label>
+                            <input type="text" class="form-control" id="encounter" name="encounter">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="supporting_information">Supporting Information</label>
+                            <input type="text" class="form-control" id="supporting_information" name="supporting_information">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="authored_on">Authored On</label>
+                            <input type="date" class="form-control" id="authored_on" name="authored_on">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="requester">Requester</label>
+                            <input type="text" class="form-control" id="requester" name="requester">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="reported">Reported</label>
+                            <input type="checkbox" class="form-check-input form-control" id="reported" name="reported">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="performer_type">Performer Type</label>
+                            <input type="text" class="form-control" id="performer_type" name="performer_type">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="performer">Performer</label>
+                            <input type="text" class="form-control" id="performer" name="performer">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="device">Device</label>
+                            <input type="text" class="form-control" id="device" name="device">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="recorder">Recorder</label>
+                            <input type="text" class="form-control" id="recorder" name="recorder">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="reason">Reason</label>
+                            <input type="text" class="form-control" id="reason" name="reason">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="course_of_therapy_type">Course of Therapy Type</label>
+                            <input type="text" class="form-control" id="course_of_therapy_type" name="course_of_therapy_type">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="insurance">Insurance</label>
+                            <input type="text" class="form-control" id="insurance" name="insurance">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="note">Note</label>
+                            <input type="text" class="form-control" id="note" name="note">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="rendered_dosage_instruction">Rendered Dosage Instruction</label>
+                            <input type="text" class="form-control" id="rendered_dosage_instruction" name="rendered_dosage_instruction">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="effective_dose_period_start">Effective Dose Period Start</label>
+                            <input type="date" class="form-control" id="effective_dose_period_start" name="effective_dose_period_start">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="effective_dose_period_end">Effective Dose Period End</label>
+                            <input type="date" class="form-control" id="effective_dose_period_end" name="effective_dose_period_end">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="dosage_instruction">Dosage Instruction</label>
+                            <input type="text" class="form-control" id="dosage_instruction" name="dosage_instruction">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="initial_fill_quantity">Initial Fill Quantity</label>
+                            <input type="text" class="form-control" id="initial_fill_quantity" name="initial_fill_quantity">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="initial_fill_unit">Initial Fill Unit</label>
+                            <input type="text" class="form-control" id="initial_fill_unit" name="initial_fill_unit">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="initial_fill_duration">Initial Fill Duration</label>
+                            <input type="text" class="form-control" id="initial_fill_duration" name="initial_fill_duration">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="initial_fill_duration_unit">Initial Fill Duration Unit</label>
+                            <input type="text" class="form-control" id="initial_fill_duration_unit" name="initial_fill_duration_unit">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="dispense_interval">Dispense Interval</label>
+                            <input type="text" class="form-control" id="dispense_interval" name="dispense_interval">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="dispense_interval_unit">Dispense Interval Unit</label>
+                            <input type="text" class="form-control" id="dispense_interval_unit" name="dispense_interval_unit">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="validity_period_start">Validity Period Start</label>
+                            <input type="text" class="form-control" id="validity_period_start" name="validity_period_start">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="validity_period_end">Validity Period End</label>
+                            <input type="text" class="form-control" id="validity_period_end" name="validity_period_end">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="number_of_repeats_allowed">Number of Repeats Allowed</label>
+                            <input type="number" class="form-control" id="number_of_repeats_allowed" name="number_of_repeats_allowed">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="quantity_unit">Quantity Unit</label>
+                            <select class="form-control" id="quantity_unit" name="quantity_unit">
+                                <option value="" selected>Select</option>
+                                <option value="mcg">Micrograms (mcg)</option>
+                                <option value="mg">Milligrams (mg)</option>
+                                <option value="g">Grams (g)</option>
+                                <option value="microl">Microliters (µL)</option>
+                                <option value="ml">Milliliters (ml)</option>
+                                <option value="l">Liters (l)</option>
+                                <option value="tablet">Tablet</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="expected_supply_duration">Expected Supply Duration</label>
+                            <input type="text" class="form-control" id="expected_supply_duration" name="expected_supply_duration">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="expected_supply_duration_unit">Expected Supply Duration Unit</label>
+                            <input type="text" class="form-control" id="expected_supply_duration_unit" name="expected_supply_duration_unit">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="dispenser">Dispenser</label>
+                            <input type="text" class="form-control" id="dispenser" name="dispenser">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="dispenser_instruction">Dispenser Instruction</label>
+                            <input type="text" class="form-control" id="dispenser_instruction" name="dispenser_instruction">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="dose_administration_aid">Dose Administration Aid</label>
+                            <input type="text" class="form-control" id="dose_administration_aid" name="dose_administration_aid">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="substitution_allowed">Substitution Allowed</label>
+                            <input type="checkbox" class="form-check-input form-control" id="substitution_allowed" name="substitution_allowed">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="substitution_reason">Substitution Reason</label>
+                            <input type="text" class="form-control" id="substitution_reason" name="substitution_reason">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <label for="event_history">Event History</label>
+                            <input type="text" class="form-control" id="event_history" name="event_history">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="button-inline">
+                    <button type="submit" class="button">Submit</button>
+                    <button class="button" type="button" onclick="window.location.href='{{ url_for('index') }}'">Cancel</button>
+                </div>
+                >
+            </form>
+
+        
+        
+        
+        
+        
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
