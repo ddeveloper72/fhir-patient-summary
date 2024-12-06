@@ -939,6 +939,127 @@ def delete_fhir_patient():
         return redirect(url_for("fhir_patient_list"))
 
 
+# Form for creating a new HL7 FHIR MedicationRequest
+@app.route("/hl7/patient_summary/fhir/medication_request/new", methods=["GET", "POST"])
+def new_fhir_medication_request():
+    """Create a new MedicationRequest record in the HAPI FHIR server."""
+
+    if request.method == "POST":
+        # Create a new MedicationRequest record with submitted form data
+        form_data = request.form
+        new_medication_request = {
+            "resourceType": "MedicationRequest",
+            "identifier": [
+                {
+                    "system": "http://example.org",
+                    "value": form_data.get("identifier", ""),
+                }
+            ],
+            "basedOn": [{"reference": form_data.get("based_on", "")}],
+            "priorPrescription": {"reference": form_data.get("prior_prescription", "")},
+            "groupIdentifier": {
+                "system": "http://example.org",
+                "value": form_data.get("group_identifier", ""),
+            },
+            "status": form_data.get("status", ""),
+            "statusReason": {"text": form_data.get("status_reason", "")},
+            "statusChanged": form_data.get("status_changed", ""),
+            "intent": form_data.get("intent", ""),
+            "category": [{"text": form_data.get("category", "")}],
+            "priority": form_data.get("priority", ""),
+            "doNotPerform": form_data.get("do_not_perform", "") == "True",
+            "medication": {"reference": form_data.get("medication", "")},
+            "subject": {"reference": form_data.get("subject", "")},
+            "informationSource": [
+                {"reference": form_data.get("information_source", "")}
+            ],
+            "encounter": {"reference": form_data.get("encounter", "")},
+            "supportingInformation": [
+                {"reference": form_data.get("supporting_information", "")}
+            ],
+            "authoredOn": form_data.get("authored_on", ""),
+            "requester": {"reference": form_data.get("requester", "")},
+            "reported": form_data.get("reported", "") == "True",
+            "performerType": {"text": form_data.get("performer_type", "")},
+            "performer": [{"reference": form_data.get("performer", "")}],
+            "device": [{"reference": form_data.get("device", "")}],
+            "recorder": {"reference": form_data.get("recorder", "")},
+            "reason": [{"reference": form_data.get("reason", "")}],
+            "courseOfTherapyType": {
+                "text": form_data.get("course_of_therapy_type", "")
+            },
+            "insurance": [{"reference": form_data.get("insurance", "")}],
+            "note": [{"text": form_data.get("note", "")}],
+            "renderedDosageInstruction": form_data.get(
+                "rendered_dosage_instruction", ""
+            ),
+            "effectiveDosePeriod": {
+                "start": form_data.get("effective_dose_period_start", ""),
+                "end": form_data.get("effective_dose_period_end", ""),
+            },
+            "dosageInstruction": [{"text": form_data.get("dosage_instruction", "")}],
+            "dispenseRequest": {
+                "initialFill": {
+                    "quantity": {
+                        "value": form_data.get("initial_fill_quantity", ""),
+                        "unit": form_data.get("initial_fill_unit", ""),
+                    },
+                    "duration": {
+                        "value": form_data.get("initial_fill_duration", ""),
+                        "unit": form_data.get("initial_fill_duration_unit", ""),
+                    },
+                },
+                "dispenseInterval": {
+                    "value": form_data.get("dispense_interval", ""),
+                    "unit": form_data.get("dispense_interval_unit", ""),
+                },
+                "validityPeriod": {
+                    "start": form_data.get("validity_period_start", ""),
+                    "end": form_data.get("validity_period_end", ""),
+                },
+                "numberOfRepeatsAllowed": form_data.get(
+                    "number_of_repeats_allowed", ""
+                ),
+                "quantity": {
+                    "value": form_data.get("quantity", ""),
+                    "unit": form_data.get("quantity_unit", ""),
+                },
+                "expectedSupplyDuration": {
+                    "value": form_data.get("expected_supply_duration", ""),
+                    "unit": form_data.get("expected_supply_duration_unit", ""),
+                },
+                "dispenser": {"reference": form_data.get("dispenser", "")},
+                "dispenserInstruction": [
+                    {"text": form_data.get("dispenser_instruction", "")}
+                ],
+                "doseAdministrationAid": {
+                    "text": form_data.get("dose_administration_aid", "")
+                },
+            },
+            "substitution": {
+                "allowedBoolean": form_data.get("substitution_allowed", "") == "True",
+                "reason": {"text": form_data.get("substitution_reason", "")},
+            },
+            "eventHistory": [{"reference": form_data.get("event_history", "")}],
+        }
+
+        print("New MedicationRequest Data:", new_medication_request)
+        client = SyncFHIRClient(FHIR_SERVER_URL)
+        try:
+            # Create a new MedicationRequest on the HAPI FHIR server
+            medication_request_resource = client.resource(
+                "MedicationRequest", **new_medication_request
+            )
+            medication_request_resource.save()
+            flash("New MedicationRequest record created successfully.", "alert-success")
+            return redirect(url_for("fhir_medication_request_list"))
+        except (ConnectionError, TimeoutError, ValueError) as e:
+            flash("Error creating new MedicationRequest: " + str(e), "alert-danger")
+            return redirect(url_for("fhir_medication_request_list"))
+
+    return render_template("new_fhir_medication_request.html")
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     """Page not found error handler"""
