@@ -9,10 +9,12 @@
 
             <form method="post" action="{{ url_for('new_fhir_medication_request') }}">
                 <div class="row g-2">
+                    <h3>Administrative Section</h3>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="identifier">Identifier</label>
-                            <input type="text" class="form-control" id="identifier" name="identifier">
+                            <input type="text" class="form-control" id="identifier" name="identifier"
+                                placeholder="External ids for this request">
                         </div>
                     </div>
                     <div class="col-md">
@@ -20,6 +22,7 @@
                             <label for="based_on">Based On</label>
                             <input type="text" class="form-control" id="based_on" name="based_on">
                         </div>
+                        <p>A plan or request that is fulfilled in whole or in part by this medication request.</p>
                     </div>
                 </div>
                 <div class="row g-2">
@@ -28,25 +31,48 @@
                             <label for="prior_prescription">Prior Prescription</label>
                             <input type="text" class="form-control" id="prior_prescription" name="prior_prescription">
                         </div>
+                        <p>Reference to an order/prescription that is being replaced by this MedicationRequest.</p>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="group_identifier">Group Identifier</label>
                             <input type="text" class="form-control" id="group_identifier" name="group_identifier">
                         </div>
+                        <p>A shared identifier common to multiple independent Request instances that were
+                            activated/authorized more or less
+                            simultaneously by a single author. The presence of the same identifier on each request ties
+                            those requests together and
+                            may have business ramifications in terms of reporting of results, billing, etc. E.g. a
+                            requisition number shared by a
+                            set of lab tests ordered together, or a prescription number shared by all meds ordered at
+                            one time.</p>
                     </div>
                 </div>
                 <div class="row g-2">
                     <div class="col-md">
                         <div class="form-group">
                             <label for="status">Status</label>
-                            <input type="text" class="form-control" id="status" name="status">
+                            <select class="form-control" id="status" name="status">
+                                <option value="" selected>Select</option>
+                                <option value="active">Active</option>
+                                <option value="on-hold">On-hold</option>
+                                <option value="ended">Ended</option>
+                                <option value="stopped">Stopped</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="entered-in-error">Entered-in-error</option>
+                                <option value="draft">Draft</option>
+                                <option value="unknown">Unknown</option>
+                            </select>
                         </div>
+                        <p>A code specifying the current state of the order. Generally, this will be active or completed
+                            state.</p>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="status_reason">Status Reason</label>
-                            <input type="text" class="form-control" id="status_reason" name="status_reason">
+                            <textarea class="form-control" id="status_reason" name="status_reason" rows="3"
+                                placeholder="Reason for current status"></textarea>
                         </div>
                     </div>
                 </div>
@@ -54,13 +80,24 @@
                     <div class="col-md">
                         <div class="form-group">
                             <label for="status_changed">Status Changed</label>
-                            <input type="date" class="form-control" id="status_changed" name="status_changed">
+                            <input type="datetime-local" class="form-control" id="status_changed" name="status_changed">
                         </div>
+                        <p>The date (and perhaps time) when the status was changed.</p>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="intent">Intent</label>
-                            <input type="text" class="form-control" id="intent" name="intent">
+                            <select class="form-control" id="intent" name="intent">
+                                <option value="" selected>Select</option>
+                                <option value="proposal">Proposal</option>
+                                <option value="plan">Plan</option>
+                                <option value="order">Order</option>
+                                <option value="original-order">Original Order</option>
+                                <option value="reflex-order">Reflex Order</option>
+                                <option value="filler-order">Filler Order</option>
+                                <option value="instance-order">Instance Order</option>
+                                <option value="option">Option</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -68,13 +105,20 @@
                     <div class="col-md">
                         <div class="form-group">
                             <label for="category">Category</label>
-                            <input type="text" class="form-control" id="category" name="category">
+                            <input type="text" class="form-control" id="category" name="category"
+                                placeholder="Grouping or category of medication request">
                         </div>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="priority">Priority</label>
-                            <input type="text" class="form-control" id="priority" name="priority">
+                            <select class="form-control" id="priority" name="priority">
+                                <option value="" selected>Select</option>
+                                <option value="routine">Routine</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="asap">ASAP</option>
+                                <option value="stat">Stat</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -82,13 +126,15 @@
                     <div class="col-md">
                         <div class="form-group">
                             <label for="do_not_perform">Do Not Perform</label>
-                            <input type="checkbox" class="form-check-input form-control" id="do_not_perform" name="do_not_perform">
+                            <input type="checkbox" class="form-check-input form-control" id="do_not_perform"
+                                name="do_not_perform">
                         </div>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="medication">Medication</label>
-                            <input type="text" class="form-control" id="medication" name="medication">
+                            <input type="text" class="form-control" id="medication" name="medication"
+                                placeholder="Medication to be taken">
                         </div>
                     </div>
                 </div>
@@ -96,7 +142,8 @@
                     <div class="col-md">
                         <div class="form-group">
                             <label for="subject">Subject</label>
-                            <input type="text" class="form-control" id="subject" name="subject">
+                            <input type="text" class="form-control" id="subject" name="subject"
+                                placeholder="Individual or group for whom the medication has been requested">
                         </div>
                     </div>
                     <div class="col-md">
@@ -104,20 +151,29 @@
                             <label for="information_source">Information Source</label>
                             <input type="text" class="form-control" id="information_source" name="information_source">
                         </div>
+                        <p>The person or organization who provided the information about this request, if the source is
+                            someone other than the
+                            requestor</p>
                     </div>
                 </div>
                 <div class="row g-2">
                     <div class="col-md">
                         <div class="form-group">
                             <label for="encounter">Encounter</label>
-                            <input type="text" class="form-control" id="encounter" name="encounter">
+                            <input type="text" class="form-control" id="encounter" name="encounter"
+                                placeholder="Encounter created as part of encounter/admission/stay">
                         </div>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="supporting_information">Supporting Information</label>
-                            <input type="text" class="form-control" id="supporting_information" name="supporting_information">
+                            <input type="text" class="form-control" id="supporting_information"
+                                placeholder="Information to support fulfilling of the medication"
+                                name="supporting_information">
                         </div>
+                        <p>Information to support fulfilling (i.e. dispensing or administering) of the medication, for
+                            example, patient height and
+                            weight, a MedicationStatement for the patient).</p>
                     </div>
                 </div>
                 <div class="row g-2">
@@ -126,12 +182,16 @@
                             <label for="authored_on">Authored On</label>
                             <input type="date" class="form-control" id="authored_on" name="authored_on">
                         </div>
+                        <p>When request was initially authored</p>
                     </div>
                     <div class="col-md">
                         <div class="form-group">
                             <label for="requester">Requester</label>
-                            <input type="text" class="form-control" id="requester" name="requester">
+                            <input type="text" class="form-control" id="requester" name="requester"
+                                placeholder="Who/What requested the Request">
                         </div>
+                        <p>Definition: The individual, organization, or device that initiated the request and has
+                            responsibility for its activation.</p>
                     </div>
                 </div>
                 <div class="row g-2">
@@ -139,245 +199,310 @@
                         <div class="form-group">
                             <label for="reported">Reported</label>
                             <input type="checkbox" class="form-check-input form-control" id="reported" name="reported">
+
+                            <p>Definition: Indicates if this record was captured as a secondary 'reported' record rather
+                                than as an original primary</p>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="performer_type">Performer Type</label>
+                                <input type="text" class="form-control" id="performer_type" name="performer_type"
+                                    placeholder="Desired kind of performer of the medication administration">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="performer_type">Performer Type</label>
-                            <input type="text" class="form-control" id="performer_type" name="performer_type">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="performer">Performer</label>
+                                <input type="text" class="form-control" id="performer" name="performer"
+                                    placeholder="Intended performer of administration">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="device">Device</label>
+                                <input type="text" class="form-control" id="device" name="device"
+                                    placeholder="Intended type of device for the administration">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="performer">Performer</label>
-                            <input type="text" class="form-control" id="performer" name="performer">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="recorder">Recorder</label>
+                                <input type="text" class="form-control" id="recorder" name="recorder"
+                                    placeholder="Person who entered the request">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="reason">Reason</label>
+                                <textarea type="text" class="form-control" id="reason" name="reason" row="2"
+                                    placeholder="Reason or indication for ordering or not ordering the medication"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="device">Device</label>
-                            <input type="text" class="form-control" id="device" name="device">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="course_of_therapy_type">Course of Therapy Type</label>
+                                <input type="text" class="form-control" id="course_of_therapy_type"
+                                    name="course_of_therapy_type">
+                            </div>
+                            <p>The description of the overall pattern of the administration of the medication to the
+                                patient.</p>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="insurance">Insurance</label>
+                                <input type="text" class="form-control" id="insurance" name="insurance"
+                                    placeholder="Associated insurance coverage">
+                            </div>
+                            <p>Insurance plans, coverage extensions, pre-authorizations and/or pre-determinations that
+                                may be required for delivering
+                                the requested service.</p>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="recorder">Recorder</label>
-                            <input type="text" class="form-control" id="recorder" name="recorder">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="note">Note</label>
+                                <textarea type="text" class="form-control" id="note" name="note" row="3"
+                                    placeholder="Information about the prescription"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="rendered_dosage_instruction">Rendered Dosage Instruction</label>
+                                <input type="text" class="form-control" id="rendered_dosage_instruction"
+                                    name="rendered_dosage_instruction">
+                            </div>
+                            <p>The full representation of the dose of the medication included in all dosage
+                                instructions. To be used when multiple
+                                dosage instructions are included to represent complex dosing such as increasing or
+                                tapering doses.</p>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="reason">Reason</label>
-                            <input type="text" class="form-control" id="reason" name="reason">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="effective_dose_period_start">Effective Dose Period Start</label>
+                                <input type="date" class="form-control" id="effective_dose_period_start"
+                                    name="effective_dose_period_start">
+                            </div>
+                            <p>The period over which the medication is to be taken. Where there are multiple
+                                dosageInstruction lines (for example,
+                                tapering doses), this is the earliest date and the latest end date of the
+                                dosageInstructions.</p>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="effective_dose_period_end">Effective Dose Period End</label>
+                                <input type="date" class="form-control" id="effective_dose_period_end"
+                                    name="effective_dose_period_end">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="course_of_therapy_type">Course of Therapy Type</label>
-                            <input type="text" class="form-control" id="course_of_therapy_type" name="course_of_therapy_type">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="dosage_instruction">Dosage Instruction</label>
+                                <textarea type="text" class="form-control" id="dosage_instruction"
+                                    name="dosage_instruction" row="4"
+                                    placeholder="Specific instructions for how the medication should be taken"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="insurance">Insurance</label>
-                            <input type="text" class="form-control" id="insurance" name="insurance">
+                    <div class="row g-2">
+                        <h3>Dispense Request</h3>
+                        <h4>Initial Fill</h4>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="initial_fill_quantity">Initial Fill Quantity</label>
+                                <input type="text" class="form-control" id="initial_fill_quantity"
+                                    name="initial_fill_quantity">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="initial_fill_unit">Initial Fill Unit</label>
+                                <input type="text" class="form-control" id="initial_fill_unit" name="initial_fill_unit">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="note">Note</label>
-                            <input type="text" class="form-control" id="note" name="note">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="initial_fill_duration">Initial Fill Duration</label>
+                                <input type="text" class="form-control" id="initial_fill_duration"
+                                    name="initial_fill_duration">
+                            </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="initial_fill_duration_unit">Initial Fill Duration Unit</label>
+                                <input type="text" class="form-control" id="initial_fill_duration_unit"
+                                    name="initial_fill_duration_unit">
+                                <div class="form-group">
+                                    <label for="duration_unit">Duration Unit</label>
+                                    <select class="form-control" id="duration_unit" name="duration_unit">
+                                        <option value="" selected>Select</option>
+                                        <option value="ms">Milliseconds</option>
+                                        <option value="s">Seconds</option>
+                                        <option value="min">Minutes</option>
+                                        <option value="h">Hours</option>
+                                        <option value="d">Days</option>
+                                        <option value="wk">Weeks</option>
+                                        <option value="mo">Months</option>
+                                        <option value="a">Years</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="rendered_dosage_instruction">Rendered Dosage Instruction</label>
-                            <input type="text" class="form-control" id="rendered_dosage_instruction" name="rendered_dosage_instruction">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="dispense_interval">Dispense Interval</label>
+                                <input type="text" class="form-control" id="dispense_interval" name="dispense_interval">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="dispense_interval_unit">Dispense Interval Unit</label>
+                                <input type="text" class="form-control" id="dispense_interval_unit"
+                                    name="dispense_interval_unit">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="effective_dose_period_start">Effective Dose Period Start</label>
-                            <input type="date" class="form-control" id="effective_dose_period_start" name="effective_dose_period_start">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="validity_period_start">Validity Period Start</label>
+                                <input type="text" class="form-control" id="validity_period_start"
+                                    name="validity_period_start">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="validity_period_end">Validity Period End</label>
+                                <input type="text" class="form-control" id="validity_period_end"
+                                    name="validity_period_end">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="effective_dose_period_end">Effective Dose Period End</label>
-                            <input type="date" class="form-control" id="effective_dose_period_end" name="effective_dose_period_end">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="number_of_repeats_allowed">Number of Repeats Allowed</label>
+                                <input type="number" class="form-control" id="number_of_repeats_allowed"
+                                    name="number_of_repeats_allowed">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="quantity_unit">Quantity Unit</label>
+                                <select class="form-control" id="quantity_unit" name="quantity_unit">
+                                    <option value="" selected>Select</option>
+                                    <option value="mcg">Micrograms (mcg)</option>
+                                    <option value="mg">Milligrams (mg)</option>
+                                    <option value="g">Grams (g)</option>
+                                    <option value="microl">Microliters (µL)</option>
+                                    <option value="ml">Milliliters (ml)</option>
+                                    <option value="l">Liters (l)</option>
+                                    <option value="tablet">Tablet</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="dosage_instruction">Dosage Instruction</label>
-                            <input type="text" class="form-control" id="dosage_instruction" name="dosage_instruction">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="expected_supply_duration">Expected Supply Duration</label>
+                                <input type="text" class="form-control" id="expected_supply_duration"
+                                    name="expected_supply_duration">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="expected_supply_duration_unit">Expected Supply Duration Unit</label>
+                                <input type="text" class="form-control" id="expected_supply_duration_unit"
+                                    name="expected_supply_duration_unit">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="initial_fill_quantity">Initial Fill Quantity</label>
-                            <input type="text" class="form-control" id="initial_fill_quantity" name="initial_fill_quantity">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="dispenser">Dispenser</label>
+                                <input type="text" class="form-control" id="dispenser" name="dispenser">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="dispenser_instruction">Dispenser Instruction</label>
+                                <input type="text" class="form-control" id="dispenser_instruction"
+                                    name="dispenser_instruction">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="initial_fill_unit">Initial Fill Unit</label>
-                            <input type="text" class="form-control" id="initial_fill_unit" name="initial_fill_unit">
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="dose_administration_aid">Dose Administration Aid</label>
+                                <input type="text" class="form-control" id="dose_administration_aid"
+                                    name="dose_administration_aid">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="initial_fill_duration">Initial Fill Duration</label>
-                            <input type="text" class="form-control" id="initial_fill_duration" name="initial_fill_duration">
+                    <div class="row g-2">
+                        <h3>Substitution</h3>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="substitution_allowed">Substitution Allowed</label>
+                                <input type="checkbox" class="form-check-input form-control" id="substitution_allowed"
+                                    name="substitution_allowed">
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="substitution_reason">Substitution Reason</label>
+                                <input type="text" class="form-control" id="substitution_reason"
+                                    name="substitution_reason">
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="initial_fill_duration_unit">Initial Fill Duration Unit</label>
-                            <input type="text" class="form-control" id="initial_fill_duration_unit" name="initial_fill_duration_unit">
+                    <div class="row g-2">
+                        <h3>History</h3>
+                        <div class="col-md">
+                            <div class="form-group">
+                                <label for="event_history">Event History</label>
+                                <input type="text" class="form-control" id="event_history" name="event_history">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="dispense_interval">Dispense Interval</label>
-                            <input type="text" class="form-control" id="dispense_interval" name="dispense_interval">
-                        </div>
+                    <br>
+                    <div class="button-inline">
+                        <button type="submit" class="button">Submit</button>
+                        <button class="button" type="button"
+                            onclick="window.location.href='{{ url_for('index') }}'">Cancel</button>
                     </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="dispense_interval_unit">Dispense Interval Unit</label>
-                            <input type="text" class="form-control" id="dispense_interval_unit" name="dispense_interval_unit">
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="validity_period_start">Validity Period Start</label>
-                            <input type="text" class="form-control" id="validity_period_start" name="validity_period_start">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="validity_period_end">Validity Period End</label>
-                            <input type="text" class="form-control" id="validity_period_end" name="validity_period_end">
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="number_of_repeats_allowed">Number of Repeats Allowed</label>
-                            <input type="number" class="form-control" id="number_of_repeats_allowed" name="number_of_repeats_allowed">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="quantity_unit">Quantity Unit</label>
-                            <select class="form-control" id="quantity_unit" name="quantity_unit">
-                                <option value="" selected>Select</option>
-                                <option value="mcg">Micrograms (mcg)</option>
-                                <option value="mg">Milligrams (mg)</option>
-                                <option value="g">Grams (g)</option>
-                                <option value="microl">Microliters (µL)</option>
-                                <option value="ml">Milliliters (ml)</option>
-                                <option value="l">Liters (l)</option>
-                                <option value="tablet">Tablet</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="expected_supply_duration">Expected Supply Duration</label>
-                            <input type="text" class="form-control" id="expected_supply_duration" name="expected_supply_duration">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="expected_supply_duration_unit">Expected Supply Duration Unit</label>
-                            <input type="text" class="form-control" id="expected_supply_duration_unit" name="expected_supply_duration_unit">
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="dispenser">Dispenser</label>
-                            <input type="text" class="form-control" id="dispenser" name="dispenser">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="dispenser_instruction">Dispenser Instruction</label>
-                            <input type="text" class="form-control" id="dispenser_instruction" name="dispenser_instruction">
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="dose_administration_aid">Dose Administration Aid</label>
-                            <input type="text" class="form-control" id="dose_administration_aid" name="dose_administration_aid">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="substitution_allowed">Substitution Allowed</label>
-                            <input type="checkbox" class="form-check-input form-control" id="substitution_allowed" name="substitution_allowed">
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="substitution_reason">Substitution Reason</label>
-                            <input type="text" class="form-control" id="substitution_reason" name="substitution_reason">
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-group">
-                            <label for="event_history">Event History</label>
-                            <input type="text" class="form-control" id="event_history" name="event_history">
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="button-inline">
-                    <button type="submit" class="button">Submit</button>
-                    <button class="button" type="button" onclick="window.location.href='{{ url_for('index') }}'">Cancel</button>
-                </div>
-                >
+                    >
             </form>
 
-        
-        
-        
-        
-        
+
+
+
+
+
         </div>
     </div>
 
