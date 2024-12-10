@@ -969,16 +969,18 @@ def new_fhir_medication_request():
             "priority": form_data.get("priority", ""),
             "doNotPerform": form_data.get("do_not_perform", "") == "True",
             "medication": {"reference": form_data.get("medication", "")},
-            "subject": {"reference": form_data.get("subject", "")},
+            "subject": {"Patient/" + "reference": form_data.get("subject", "")},
             "informationSource": [
                 {"reference": form_data.get("information_source", "")}
             ],
-            "encounter": {"reference": form_data.get("encounter", "")},
+            "encounter": {"Encounter/" + "reference": form_data.get("encounter", "")},
             "supportingInformation": [
-                {"reference": form_data.get("supporting_information", "")}
+                {"reference": form_data.get("Coverage/" + "supporting_information", "")}
             ],
             "authoredOn": form_data.get("authored_on", ""),
-            "requester": {"reference": form_data.get("requester", "")},
+            "requester": {
+                "Practitioner/" + "reference": form_data.get("requester", "")
+            },
             "reported": form_data.get("reported", "") == "True",
             "performerType": {"text": form_data.get("performer_type", "")},
             "performer": [{"reference": form_data.get("performer", "")}],
